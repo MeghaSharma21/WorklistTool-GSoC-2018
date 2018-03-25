@@ -25,7 +25,7 @@ function fetchArticles() {
     },
     success: function(data, status, jqXHR) {
       var html = "";
-      if (!data.result || data.articles.length == 0) {
+      if (!data.result) {
         $('#results').empty();
         alert(data.message);
         html = "<div class='panel panel-default message'> " +
