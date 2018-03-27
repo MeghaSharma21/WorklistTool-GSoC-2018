@@ -1,0 +1,74 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Worklist-Tool</title>
+	<meta name="theme-color" content="#323754">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="On this tool you can maintain worklists">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.sticky/1.0.4/jquery.sticky.js"></script>
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/popper.js/1.9.9/umd/popper.min.js"></script>
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2">
+			</div>
+			<div class="col-md-8 create-worklist-container">
+				<h2>Worklists Created</h2>
+				<div class="row">
+					<div class="col-md-6">
+						<p><a href="/worklist-tool/create-worklist">Click here</a> to create another worklist</p>
+					</div>
+					<div class="col-md-6">
+						<form action="/worklist-tool" method="get">
+							{% csrf_token %}
+							<input type="text" name="searchTerm" placeholder="Search worklist by name">
+							<input type="submit" value="Submit">
+						</form>
+					</div>
+				</div>
+
+				{% if results|length %}
+					<table class="table table-bordered">
+						<thead>
+					      <tr>
+					        <th>Name</th>
+					        <th>Theme</th>
+					        <th>Description</th>
+					        <th>Created By</th>
+					        <th>PetScan Query ID</th>
+					      </tr>
+					    </thead>
+					    <tbody>
+						{% for worklist in results %}
+					      <tr>
+					        <td>{{worklist.name}}</td>
+					        <td>{{worklist.theme}}</td>
+					        <td>{{worklist.description}}</td>
+					        <td>{{worklist.created_by}}</td>
+					        <td>{{worklist.psid}}</td>
+					      </tr>
+						{% endfor %}
+					    </tbody>
+					</table>
+				{% else %}
+					<div class="row">
+						<div class="alert alert-warning" role="alert">
+						  Oops! No Worklist Exists!
+						</div>
+					</div>
+				{% endif %}
+
+			</div>
+		</div>		
+	</div>
+
+</body>
+</html>
