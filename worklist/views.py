@@ -25,12 +25,12 @@ def create_worklist(request):
 
 
 def show_worklist(request):
-    searchTerm = request.GET.get('searchTerm','')
-    worklists = [] 
-    if searchTerm == '':
+    worklistName = request.GET.get('worklistName','')
+    worklists = []
+    if worklistName == '':
         results = WorkList.objects.all()
     else:
-        results = WorkList.objects.filter(name=searchTerm)
+        results = WorkList.objects.filter(name=worklistName)
     for result in results:
         worklist = {
             'name': result.name,
