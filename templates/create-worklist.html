@@ -1,0 +1,68 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Worklist-Tool</title>
+	<meta name="theme-color" content="#323754">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="On this tool you can maintain worklists">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/popper.js/1.9.9/umd/popper.min.js"></script>
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href={% static "css/main.css" %}>
+</head>
+<body>
+
+	<div class="container">
+
+		{% if content.error == 0 %}
+			<div class="row">
+				<div class="col-md-4">
+				</div>
+				<div class="col-md-4">
+					<div class="alert alert-success" role="alert">
+					  {{content.message}}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+				</div>
+				<div class="col-md-4">
+					<p><a href="/worklist-tool">Click here</a> to see all the worklists</p>
+				</div>
+			</div>
+		{% else %}
+			<div class="row">
+				<div class="col-md-2">
+				</div>
+				<div class="col-md-8 create-worklist-container">
+					<h2>Create Worklist</h2>
+					<p><a href="/worklist-tool">Click here</a> to see all the worklists</p>
+					<form action="/worklist-tool/create-worklist" method="post">
+						{% csrf_token %}
+					  Name of Worklist: <input type="text" name="name" placeholder="Enter name of the new worklist you want to create...">
+					  <br>
+					  Theme: <input type="text" name="theme" placeholder="Enter the theme to which it may belong...">
+					  <br>
+					  <p>Description:</p>
+					  <textarea rows="4" cols="60" name="description"></textarea>
+					  <br>
+					  Username: <input type="text" name="created_by" placeholder="Enter your wikipedia username...">
+					  <br>
+					  PetScan Query ID: <input type="text" name="psid" placeholder="Enter the PetScan Query ID to associate with this worklist...">
+					  <br>
+					  <br>
+					  <input type="submit" value="Submit">
+					</form>
+				</div>
+			</div>
+		{% endif %}
+
+	</div>
+
+</body>
+</html>

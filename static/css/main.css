@@ -1,0 +1,13 @@
+.create-worklist-container {
+}
+
+input, textarea {
+	width: 440px;
+	margin: 1rem;
+}
+
+textarea  {
+	margin-left: 0;
+	margin-top: 0;
+	width: 520px;
+}
