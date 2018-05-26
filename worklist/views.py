@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 import json
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -102,7 +100,7 @@ def search_worklist(request):
 def search_task(request):
     search_term = request.GET.get('search_term', '')
     worklist_name = request.GET.get('worklist_name', '')
-    worklist_created_by = request.GET.get('created_by', '')
+    worklist_created_by = request.GET.get('worklist_created_by', '')
     tasks = []
 
     if search_term == '':

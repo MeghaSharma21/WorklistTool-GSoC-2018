@@ -2,7 +2,7 @@ from worklist.constants import ARTICLE_STATUS_TO_NUMBER_MAPPING,\
     INITIAL_ARTICLE_STATUS, INITIAL_ARTICLE_PROGRESS
 from worklist.views_helper_functions.fetch_articles_from_petscan import \
     fetch_articles_from_petscan
-from worklist.general_utility_functions import convert_article_titles_into_ids
+from worklist.wikipedia_utils import convert_article_titles_into_ids
 from worklist.models import Task, Articles
 import logging
 
