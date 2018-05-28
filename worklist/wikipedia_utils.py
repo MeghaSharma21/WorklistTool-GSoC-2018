@@ -4,6 +4,9 @@ import mwclient
 
 # Function that uses MediaWiki API that maps page titles to IDs
 def convert_article_titles_into_ids(titles):
+    if len(titles) == 0:
+        return defaultdict(int)
+
     page_title_to_id_mapping = defaultdict(int)
 
     titles_list = ' | '.join(str(page) for page in titles)

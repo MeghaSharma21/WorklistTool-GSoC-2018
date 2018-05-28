@@ -8,7 +8,7 @@ logger = logging.getLogger('django')
 # Petscan by taking a petscan ID as input
 def fetch_articles_from_petscan(psid):
     message = 'Successfully fetched articles from petscan ' \
-              'using ID: {0}'.format(str(psid))
+              'using ID: {0}'.format(psid)
     success = True
 
     parameters = {'format': 'json', 'psid': psid}
@@ -23,7 +23,7 @@ def fetch_articles_from_petscan(psid):
         success = False
         message = 'Execution Failed at getting petscanquery ' \
                   'articles, Error: {0}' \
-            .format(str(response['error']['info']))
+            .format(response['error']['info'])
 
     articles = response['*'][0]['a']['*']
 
