@@ -1,36 +1,78 @@
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 import logging
 from worklist.constants import SEARCH_BY_NAME_FOR_WORKLISTS, \
-    SEARCH_BY_USERNAME_FOR_WORKLISTS
+    SEARCH_BY_USERNAME_FOR_WORKLISTS, ARTICLE_STATUS_TO_NUMBER_MAPPING, \
+    ARTICLE_NUMBER_TO_STATUS_MAPPING
 from worklist.views_helper_functions.store_articles import \
     store_added_articles, store_psid_articles
 from worklist.models import WorkList, Task
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+
 
 logger = logging.getLogger('django')
 
 
+# View related to OAuth using MediaWiki
+def mediawiki_login(request):
+    return HttpResponseRedirect(
+        'https://tools.wmflabs.org/worklist-tool/oauth/login/mediawiki/')
+
+
+# View for logging out from the app
+@login_required
+def app_logout(request):
+    logout(request)
+    # if user has logged out of the app, take him to home page
+    message = ''
+    is_logged_in = False
+    error = False
+    return render(request, 'homepage.html',
+                  {'message': message,
+                   'is_logged_in': is_logged_in,
+                   'error': error,
+                   'logged_in_user': '',
+                   })
+
+
+# View corresponding to homepage of the app
+def homepage(request):
+    message = ''
+    error = False
+    is_logged_in = False
+    logged_in_user = ''
+    if request.user.is_authenticated:
+        logged_in_user = request.user.username
+        is_logged_in = True
+
+    return render(request, 'homepage.html',
+                  {'logged_in_user': logged_in_user, 'message': message,
+                   'is_logged_in': is_logged_in,
+                   'error': error,
+                   })
+
+
 # View to create a worklist
+@login_required
 def create_worklist(request):
+    username = request.user.username
     content = {'error': 0, 'message': ''}
     if request.method == 'POST':
         content = {'error': 0, 'message': 'Successfully saved worklist'}
         data = {'name': request.POST.get('name', None),
                 'tags': request.POST.get('tags', ''),
                 'description': request.POST.get('description', ''),
-                'created_by': request.POST.get('created_by', None),
+                'created_by': username,
                 'psid': request.POST.get('psid', 0),  # As database stores blank integer
                                                       # field as zero
                 'articles': json.loads(request.POST.get('articles', "[]"))
                 }
 
-        if data['name'] is None:
+        if data['name'] is None or data['name'] == '':
             content['error'] = 1
             content['message'] = 'Name of worklist can not be blank'
-        elif data['created_by'] is None:
-            content['error'] = 1
-            content['message'] = 'Please login to create a worklist'
         elif WorkList.objects.filter(name=data['name'],
                                      created_by=data['created_by']).exists():
             content['error'] = 1
@@ -59,11 +101,17 @@ def create_worklist(request):
 
         return JsonResponse(content)
     logger.info('Message:' + str(content['message']))
-    return render(request, 'create-worklist.html', {'content': content})
+    return render(request, 'create-worklist.html', {'content': content,
+                                                    'logged_in_user': username})
 
 
 # View to search a worklist by it's name or by user who created the worklist
 def search_worklist(request):
+    if request.user.is_authenticated:
+        logged_in_user = request.user.username
+    else:
+        logged_in_user = None
+
     search_term = request.GET.get('search_term', '')
     search_type = request.GET.get('search_type', '')
 
@@ -93,11 +141,16 @@ def search_worklist(request):
 
         worklists.append(worklist)
 
-    return render(request, 'show-worklist.html', {'results': worklists})
+    return render(request, 'show-worklist.html', {'results': worklists, 'logged_in_user': logged_in_user})
 
 
 # View to search a task by it's name
 def search_task(request):
+    if request.user.is_authenticated:
+        logged_in_user = request.user.username
+    else:
+        logged_in_user = None
+
     search_term = request.GET.get('search_term', '')
     worklist_name = request.GET.get('worklist_name', '')
     worklist_created_by = request.GET.get('worklist_created_by', '')
@@ -118,7 +171,7 @@ def search_task(request):
             'article_name': result.article.name,
             'description': result.description,
             'created_by': result.created_by,
-            'status': result.status,
+            'status': ARTICLE_NUMBER_TO_STATUS_MAPPING[result.status],
             'progress': result.progress,
             'effort': result.effort,
             'claimed_by': result.claimed_by
@@ -128,4 +181,29 @@ def search_task(request):
 
     return render(request, 'show-task.html', {'tasks': tasks,
                                               'worklist_name': worklist_name,
-                                              'worklist_created_by': worklist_created_by})
+                                              'worklist_created_by': worklist_created_by,
+                                              'logged_in_user': logged_in_user})
+
+
+@login_required
+def update_task_info(request):
+    username = request.user.username
+    worklist_name = request.POST.get('worklist_name', '')
+    worklist_created_by = request.POST.get('worklist_created_by', '')
+    article_name = request.POST.get('article_name', '')
+    status = request.POST.get('status', '')
+    progress = request.POST.get('progress', '')
+    claimed_by = ''
+
+    if status == 'claimed':
+        claimed_by = username
+    status_code = ARTICLE_STATUS_TO_NUMBER_MAPPING[status]
+
+    results = Task.objects.filter(worklist__name=worklist_name,
+                                  worklist__created_by=worklist_created_by,
+                                  article__name=article_name)
+
+    results.update(progress=progress, status=status_code, claimed_by=claimed_by)
+
+    return JsonResponse({'success': True})
+

@@ -9,7 +9,10 @@ INITIAL_ARTICLE_PROGRESS = 0
 # Constant for mapping article status to a
 # number for storing purposes
 ARTICLE_STATUS_TO_NUMBER_MAPPING = \
-    {'open': 0, 'closed': 1, 'in_progress': 2}
+    {'open': 0, 'closed': 1, 'claimed': 2}
+
+ARTICLE_NUMBER_TO_STATUS_MAPPING = \
+    {0: 'open', 1: 'closed', 2: 'claimed'}
 
 # Search type for searching of worklists - by
 # name of the worklist
