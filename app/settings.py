@@ -110,3 +110,4 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = 'login_url'
 LOGIN_REDIRECT_URL = 'show_worklist'
+
