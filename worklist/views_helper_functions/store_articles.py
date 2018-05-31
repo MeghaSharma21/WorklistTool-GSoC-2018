@@ -14,15 +14,16 @@ def store_added_articles(worklist_object, articles):
     success = True
     titles = []
 
+    for article in articles:
+        if article['name'] == '':
+            articles.remove(article)
+
     # Mapping article titles into IDs
     for article in articles:
-        if article['name'] != '':
-            titles.append(article['name'])
+        titles.append(article['name'])
     article_ids = convert_article_titles_into_ids(titles)
 
     for article in articles:
-        if article['name'] == '':
-            continue
         title = article['name']
         data = {'article_id': article_ids[title], 'name': title}
         article_object = Articles.create_object(data)
@@ -49,16 +50,15 @@ def store_added_articles(worklist_object, articles):
 def store_psid_articles(worklist_object, psid, created_by):
     success = True
     # Fetching articles from petscan using psid
-    results = fetch_articles_from_petscan(psid)
+    articles = fetch_articles_from_petscan(psid)
 
-    if results is False or results['success'] is False:
-        success = False
-        return success
+    if len(articles) == 0:
+        return False
 
     titles = []
 
     # Mapping article titles into IDs
-    for article in results['articles']:
+    for article in articles:
         titles.append(str(article['title']))
     article_ids = convert_article_titles_into_ids(titles)
 

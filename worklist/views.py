@@ -1,3 +1,4 @@
+import functools
 import json
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -25,30 +26,38 @@ def mediawiki_login(request):
 @login_required
 def app_logout(request):
     logout(request)
+
     # if user has logged out of the app, take him to home page
-    message = ''
-    is_logged_in = False
-    error = False
     return render(request, 'homepage.html',
-                  {'message': message,
-                   'is_logged_in': is_logged_in,
-                   'error': error,
+                  {'message': '',
+                   'is_logged_in': False,
+                   'error': False,
                    'logged_in_user': '',
                    })
 
 
+def with_logged_in_user(view):
+
+    @functools.wraps
+    def inner_method(request):
+        user_or_none = None
+        is_logged_in = False
+
+        if request.user.is_authenticated:
+            user_or_none = request.user.username
+            is_logged_in = True
+
+        return view(request, user_or_none, is_logged_in)
+
+
 # View corresponding to homepage of the app
-def homepage(request):
+@with_logged_in_user
+def homepage(request, username, is_logged_in):
     message = ''
     error = False
-    is_logged_in = False
-    logged_in_user = ''
-    if request.user.is_authenticated:
-        logged_in_user = request.user.username
-        is_logged_in = True
 
     return render(request, 'homepage.html',
-                  {'logged_in_user': logged_in_user, 'message': message,
+                  {'logged_in_user': username, 'message': message,
                    'is_logged_in': is_logged_in,
                    'error': error,
                    })
@@ -106,12 +115,8 @@ def create_worklist(request):
 
 
 # View to search a worklist by it's name or by user who created the worklist
-def search_worklist(request):
-    if request.user.is_authenticated:
-        logged_in_user = request.user.username
-    else:
-        logged_in_user = None
-
+@with_logged_in_user
+def search_worklist(request, username, is_logged_in):
     search_term = request.GET.get('search_term', '')
     search_type = request.GET.get('search_type', '')
 
@@ -141,16 +146,12 @@ def search_worklist(request):
 
         worklists.append(worklist)
 
-    return render(request, 'show-worklist.html', {'results': worklists, 'logged_in_user': logged_in_user})
+    return render(request, 'show-worklist.html', {'results': worklists, 'logged_in_user': username})
 
 
 # View to search a task by it's name
-def search_task(request):
-    if request.user.is_authenticated:
-        logged_in_user = request.user.username
-    else:
-        logged_in_user = None
-
+@with_logged_in_user
+def search_task(request, username, is_logged_in):
     search_term = request.GET.get('search_term', '')
     worklist_name = request.GET.get('worklist_name', '')
     worklist_created_by = request.GET.get('worklist_created_by', '')
@@ -182,7 +183,7 @@ def search_task(request):
     return render(request, 'show-task.html', {'tasks': tasks,
                                               'worklist_name': worklist_name,
                                               'worklist_created_by': worklist_created_by,
-                                              'logged_in_user': logged_in_user})
+                                              'logged_in_user': username})
 
 
 @login_required
