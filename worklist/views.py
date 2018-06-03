@@ -30,35 +30,33 @@ def app_logout(request):
     # if user has logged out of the app, take him to home page
     return render(request, 'homepage.html',
                   {'message': '',
-                   'is_logged_in': False,
                    'error': False,
-                   'logged_in_user': '',
+                   'logged_in_user': None,
                    })
 
 
 def with_logged_in_user(view):
 
-    @functools.wraps
+    @functools.wraps(view)
     def inner_method(request):
         user_or_none = None
-        is_logged_in = False
 
         if request.user.is_authenticated:
             user_or_none = request.user.username
-            is_logged_in = True
 
-        return view(request, user_or_none, is_logged_in)
+        return view(request, user_or_none)
+
+    return inner_method
 
 
 # View corresponding to homepage of the app
 @with_logged_in_user
-def homepage(request, username, is_logged_in):
+def homepage(request, username):
     message = ''
     error = False
 
     return render(request, 'homepage.html',
                   {'logged_in_user': username, 'message': message,
-                   'is_logged_in': is_logged_in,
                    'error': error,
                    })
 
@@ -78,6 +76,8 @@ def create_worklist(request):
                                                       # field as zero
                 'articles': json.loads(request.POST.get('articles', "[]"))
                 }
+        content['created_by'] = data['created_by']
+        content['name'] = data['name']
 
         if data['name'] is None or data['name'] == '':
             content['error'] = 1
@@ -108,6 +108,10 @@ def create_worklist(request):
                     content['error'] = 1
                     content['message'] = 'Petscan articles could not be saved.'
 
+        if content['error'] == 1:
+            WorkList.objects.filter(name=data['name'],
+                                    created_by=data['created_by']).delete()
+
         return JsonResponse(content)
     logger.info('Message:' + str(content['message']))
     return render(request, 'create-worklist.html', {'content': content,
@@ -116,7 +120,7 @@ def create_worklist(request):
 
 # View to search a worklist by it's name or by user who created the worklist
 @with_logged_in_user
-def search_worklist(request, username, is_logged_in):
+def search_worklist(request, username):
     search_term = request.GET.get('search_term', '')
     search_type = request.GET.get('search_type', '')
 
@@ -151,7 +155,7 @@ def search_worklist(request, username, is_logged_in):
 
 # View to search a task by it's name
 @with_logged_in_user
-def search_task(request, username, is_logged_in):
+def search_task(request, username):
     search_term = request.GET.get('search_term', '')
     worklist_name = request.GET.get('worklist_name', '')
     worklist_created_by = request.GET.get('worklist_created_by', '')

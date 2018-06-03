@@ -55,15 +55,8 @@ def store_psid_articles(worklist_object, psid, created_by):
     if len(articles) == 0:
         return False
 
-    titles = []
-
-    # Mapping article titles into IDs
-    for article in articles:
-        titles.append(str(article['title']))
-    article_ids = convert_article_titles_into_ids(titles)
-
-    for key, value in article_ids.items():
-        data = {'article_id': value, 'name': key}
+    for article in articles['articles']:
+        data = {'article_id': article['id'], 'name': article['title']}
         article_object = Articles.create_object(data)
 
         data = {'worklist': worklist_object,
