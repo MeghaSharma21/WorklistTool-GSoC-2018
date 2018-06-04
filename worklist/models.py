@@ -38,8 +38,14 @@ class Articles(models.Model):
     # Method to create a new entry in the table
     @staticmethod
     def create_object(data):
-        if data.get('article_id') is None:
+        if data.get('article_id') == '' or data.get('article_id') is None:
             data['article_id'] = 0
+
+        if data.get('avg_page_views') == '' or data.get('avg_page_views') is None:
+            data['avg_page_views'] = 0
+
+        if data.get('size') == '' or data.get('size') is None:
+            data['size'] = 0
 
         obj, created = Articles.objects.get_or_create(article_id=data.get('article_id', 0),
                                                       name=data['name'],
@@ -77,6 +83,15 @@ class Task(models.Model):
     # Method to create a new entry in the table
     @staticmethod
     def create_object(data):
+        if data.get('progress') == '' or data.get('progress') is None:
+            data['progress'] = 0
+
+        if data.get('effort') == '' or data.get('effort') is None:
+            data['effort'] = 0
+
+        if data.get('status') == '' or data.get('status') is None:
+            data['status'] = 0
+
         Task.objects.get_or_create(worklist=data['worklist'],
                                    article=data['article'],
                                    psid=data.get('psid', 0),

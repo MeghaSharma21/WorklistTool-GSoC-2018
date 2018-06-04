@@ -14,28 +14,28 @@ def store_added_articles(worklist_object, articles):
     success = True
     titles = []
 
+    for article in articles:
+        if article['name'] == '':
+            articles.remove(article)
+
     # Mapping article titles into IDs
     for article in articles:
-        titles.append(str(article['name']))
+        titles.append(article['name'])
     article_ids = convert_article_titles_into_ids(titles)
 
-    if article_ids == -1:
-        success = False
-        return success
-
     for article in articles:
-        title = str(article['name'])
+        title = article['name']
         data = {'article_id': article_ids[title], 'name': title}
         article_object = Articles.create_object(data)
 
         data = {'worklist': worklist_object,
                 'article': article_object,
-                'description': str(article['description']),
+                'description': article['description'],
                 'status':
                     ARTICLE_STATUS_TO_NUMBER_MAPPING[INITIAL_ARTICLE_STATUS],
                 'progress': INITIAL_ARTICLE_PROGRESS,
                 'effort': str(article['effort']),
-                'created_by': str(article['created_by'])}
+                'created_by': article['created_by']}
         Task.create_object(data)
 
     if success is True:
@@ -50,21 +50,13 @@ def store_added_articles(worklist_object, articles):
 def store_psid_articles(worklist_object, psid, created_by):
     success = True
     # Fetching articles from petscan using psid
-    results = fetch_articles_from_petscan(psid)
+    articles = fetch_articles_from_petscan(psid)
 
-    if results['success'] is False:
-        success = False
-        return success
+    if len(articles) == 0:
+        return False
 
-    titles = []
-
-    # Mapping article titles into IDs
-    for article in results['articles']:
-        titles.append(str(article['title']))
-    article_ids = convert_article_titles_into_ids(titles)
-
-    for key, value in article_ids.items():
-        data = {'article_id': value, 'name': key}
+    for article in articles['articles']:
+        data = {'article_id': article['id'], 'name': article['title']}
         article_object = Articles.create_object(data)
 
         data = {'worklist': worklist_object,
@@ -73,7 +65,9 @@ def store_psid_articles(worklist_object, psid, created_by):
                 'status':
                     ARTICLE_STATUS_TO_NUMBER_MAPPING[INITIAL_ARTICLE_STATUS],
                 'progress': INITIAL_ARTICLE_PROGRESS,
-                'created_by': created_by}
+                'created_by': created_by,
+                'description': 'This article is a part of petscan '
+                               'query having ID: {0}'.format(psid)}
         Task.create_object(data)
 
     if success is True:
