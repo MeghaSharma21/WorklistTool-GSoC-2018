@@ -1,0 +1,43 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Wikimedia PetScan Query Articles Tool</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.2.1/jquery.js"></script>
+	<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href={% static "css/main.css" %}>
+	<script type="text/javascript" src={% static "js/main.js" %}></script>
+</head>
+
+<body>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<img src={% static "images/petscan.png" %} class="tool-logo" align="left">
+			</div>
+			<div class="col-md-8 search-box-container main-heading">
+				<h2>Which PetScan Query Articles are you looking for?</h2>
+				<div id="wrap">
+					<form action="javascript:fetchArticles();" autocomplete="on">
+						<input id="search" name="search" type="text" placeholder="Enter petscan query ID...">
+						<input id="search_submit" value="Rechercher" type="submit">
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="slide-container" id="results">
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>
