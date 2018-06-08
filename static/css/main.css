@@ -36,14 +36,15 @@
     margin-top: -5rem;
 }
 
+.show-worklists-button {
+    padding-right: 1rem;
+    width:100%; text-align: center
+}
+
 /* Homepage CSS ends */
 
 
 /* Base HTML CSS starts */
-
-.show-worklists-button {
-    padding-right: 1rem;
-}
 
 .hidden {
     display: none;
