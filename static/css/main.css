@@ -1,11 +1,5 @@
 /* Homepage CSS starts*/
 
-.homepage-body {
-    font-size: 10px;
-    font-family: 'Roboto', ! sans-serif important;
-    word-spacing: 1px;
-}
-
 .error-message-holder {
     position: fixed;
     left: 50%;
@@ -100,4 +94,15 @@
     width: 535px
 }
 
+.article-name{
+    width: 572px;
+}
+
+.article-description{
+    width: 600px;
+}
+
+.article-effort{
+    width: 644px;
+}
 /* Create Worklists CSS ends */

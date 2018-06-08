@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+    <style type="text/css">
+        body{
+            font-size: 10px;
+            font-family: 'Roboto', ! sans-serif important;
+            word-spacing: 1px;
+        }
+    </style>
+{%  endblock %}
+
+{% block content %}
+    <!-- Placeholder for any error message on the site -->
+    {% if error %}
+    <div id="alert-message-holder" class="error-message-holder">
+        <div class='alert alert-danger home-page-error alert-dismissible fade show' role='alert'>
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    {% endif %}
+    <!-- end alert-message-holder -->
+
+    <div class="container">
+        <div class="row homepage-clipboard-icon">
+            <i class="fa fa-3x graduation fa-clipboard"></i>
+        </div>
+        <div class="row">
+            <div class="wikicv-title home-page-text">WikiHub</div>
+            <h1 class="home-page-text baseline">A Worklist Tool </h1>
+        </div>
+    </div>
+{%  endblock %}

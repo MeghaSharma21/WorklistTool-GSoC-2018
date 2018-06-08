@@ -3,11 +3,11 @@ var noOfArticles = 0;
 function addNewArticle() {
     noOfArticles++;
     var html = '<div id="article-'+noOfArticles+'"><br/><h3>Article '
-        + noOfArticles +'</h3>Name of Article: <input style="width: 572px;" type="text" ' +
+        + noOfArticles +'</h3>Name of Article: <input type="text" ' +
         'class="article-name" name="article-name" placeholder="Enter name of the article">' +
-        '<br/>Description: <input style="width: 600px;" type="text" name="article-description" ' +
+        '<br/>Description: <input type="text" name="article-description" ' +
         'class="article-description" placeholder="Enter description of the work to be done ' +
-        'for this article"><br/>Effort: <input style="width: 644px;" type="text" ' +
+        'for this article"><br/>Effort: <input type="text" ' +
         'name="article-effort" class="article-effort" placeholder="Enter estimated effort ' +
         'to do work for this article"></div>'
 
