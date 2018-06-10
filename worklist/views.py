@@ -211,4 +211,3 @@ def update_task_info(request):
     results.update(progress=progress, status=status_code, claimed_by=claimed_by)
 
     return JsonResponse({'success': True})
-

@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block scripts %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
     <script src="{% static 'js/show-worklist.js' %}"></script>
     <style type="text/css">
     	input[name=search_term] {
@@ -62,7 +64,8 @@
 				</div>
 				{% if results|length %}
 					<div class="row">
-						<table class="table table-bordered">
+                    <div class="table-alignment">
+                        <table data-pagination="true" data-toggle="table" class="table table-bordered">
 							<thead>
 						      <tr>
 						        <th>Name</th>
@@ -87,6 +90,7 @@
 							{% endfor %}
 						    </tbody>
 						</table>
+                    </div>
 					</div>
 				{% else %}
 					<div class="row">
