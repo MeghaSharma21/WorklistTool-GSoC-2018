@@ -14,7 +14,6 @@ def convert_article_titles_into_ids(titles):
         # Since at max 50 titles can be passed in one request
         titles_list = ' | '.join(str(page) for page in
                                  titles_array[:50])
-
         titles_array = titles_array[50:]
 
         site = mwclient.Site('en.wikipedia.org')
