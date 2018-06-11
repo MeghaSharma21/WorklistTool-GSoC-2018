@@ -1,5 +1,6 @@
 import requests
 import logging
+from worklist.constants import TIMEOUT_IN_SECONDS
 
 logger = logging.getLogger('django')
 
@@ -13,7 +14,7 @@ def fetch_articles_from_petscan(psid):
     parameters = {'format': 'json', 'psid': psid}
     url = "https://petscan.wmflabs.org"
     try:
-        response = requests.get(url, params=parameters).json()
+        response = requests.get(url, params=parameters, timeout=TIMEOUT_IN_SECONDS).json()
     except Exception as e:
         logger.info('Failed to query PetScan: {0} {1}'.format(type(e), e))
         return articles

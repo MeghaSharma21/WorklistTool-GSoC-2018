@@ -1,65 +1,101 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Worklist-Tool</title>
-	<meta name="theme-color" content="#323754">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="description" content="On this tool you can maintain worklists">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.2.1/jquery.js"></script>
-    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/popper.js/1.9.9/umd/popper.min.js"></script>
-    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
-</head>
-<body>
+{% extends 'base.html' %}
 
+{% block scripts %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+    <script src="{% static 'js/show-worklist.js' %}"></script>
+    <style type="text/css">
+    	input[name=search_term] {
+    		padding: 6px;
+    	}
+    	#search_by_worklist_name, #search_by_username {
+    		text-align: right;
+			padding-right: 0;
+    	}
+    </style>
+{%  endblock %}
+
+{% block content %}
 	<div class="container">
 		<div class="row">
 			<div class="col-md-2">
 			</div>
 			<div class="col-md-8 create-worklist-container">
-				<h2>Worklists Created</h2>
+				<h2 class="top-heading">Created Worklists</h2>
 				<div class="row">
-					<div class="col-md-6">
-						<p><a href="/worklist-tool/create-worklist">Click here</a> to create another worklist</p>
+					<div class="col-md-3 no-left-padding">
+						<a role="button" class="btn btn-outline-primary"
+                           href="/worklist-tool/create-worklist">Create worklist</a>
 					</div>
-					<div class="col-md-6">
-						<form action="/worklist-tool" method="get">
-							{% csrf_token %}
-							<input type="text" name="worklistName" placeholder="Search worklist by name">
-							<input type="submit" value="Submit">
+					<div id="search_by_worklist_name" class="col-md-6">
+						<form action="/worklist-tool/show-worklist" method="get">
+							<input type="text" name="search_term"
+                                   placeholder="Search worklist">
+							<input class="hidden" id="worklist_name" type="text"
+                                   name="search_type" value="worklist_name">
+							<button type="submit" class="btn btn-outline-secondary">
+							    <i class="fa fa-search"></i>
+							</button>
 						</form>
 					</div>
+					<div class="hidden col-md-6" id="search_by_username">
+						<form action="/worklist-tool/show-worklist" method="get">
+							<input type="text" name="search_term" placeholder="Search worklist">
+							<input class="hidden" id="username" type="text"
+                                   name="search_type" value="username">
+							<button type="submit" class="btn btn-outline-secondary">
+							    <i class="fa fa-search"></i>
+							</button>
+						</form>
+					</div>
+					<div class="col-md-3">
+						<div class="dropdown">
+						  <button class="btn btn-secondary dropdown-toggle" type="button"
+                                  id="dropdownMenuButton" data-toggle="dropdown"
+                                  aria-haspopup="true" aria-expanded="false">
+                              By Worklist Name
+						  </button>
+						  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						    <a class="dropdown-item" onclick="search_by_worklist_name()">Worklist Name</a>
+						    <a class="dropdown-item" onclick="search_by_username()">Username</a>
+						  </div>
+						</div>
+					</div>
 				</div>
-
 				{% if results|length %}
-					<table class="table table-bordered">
-						<thead>
-					      <tr>
-					        <th>Name</th>
-					        <th>Theme</th>
-					        <th>Description</th>
-					        <th>Created By</th>
-					        <th>PetScan Query ID</th>
-					      </tr>
-					    </thead>
-					    <tbody>
-						{% for worklist in results %}
-					      <tr>
-					        <td>{{worklist.name}}</td>
-					        <td>{{worklist.theme}}</td>
-					        <td>{{worklist.description}}</td>
-					        <td>{{worklist.created_by}}</td>
-					        <td>{{worklist.psid}}</td>
-					      </tr>
-						{% endfor %}
-					    </tbody>
-					</table>
+					<div class="row">
+                    <div class="table-alignment">
+                        <table data-pagination="true" data-toggle="table" class="table table-bordered">
+							<thead>
+						      <tr>
+						        <th>Name</th>
+						        <th>Tags</th>
+						        <th>Description</th>
+						        <th>Created By</th>
+						        <th>PetScan Query ID</th>
+						      </tr>
+						    </thead>
+						    <tbody>
+							{% for worklist in results %}
+						      <tr>
+						        <td>
+                                    <a href="/worklist-tool/show-tasks?worklist_name={{worklist.name}}&worklist_created_by={{worklist.created_by}}">{{worklist.name}}
+                                    </a>
+                                </td>
+						        <td>{{worklist.tags}}</td>
+						        <td>{{worklist.description}}</td>
+						        <td>{{worklist.created_by}}</td>
+						        <td>{{worklist.psid}}</td>
+						      </tr>
+							{% endfor %}
+						    </tbody>
+						</table>
+                    </div>
+					</div>
 				{% else %}
 					<div class="row">
 						<div class="alert alert-warning" role="alert">
+						  <a href='#' class='close' data-dismiss='alert'>&times;</a>
 						  Oops! No Worklist Exists!
 						</div>
 					</div>
@@ -68,6 +104,4 @@
 			</div>
 		</div>
 	</div>
-
-</body>
-</html>
+{%  endblock %}

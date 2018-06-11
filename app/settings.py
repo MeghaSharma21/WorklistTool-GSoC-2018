@@ -55,6 +55,7 @@ TEMPLATES = [
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
             ],
+            'builtins': ['django.contrib.staticfiles.templatetags.staticfiles']
         },
     },
 ]
@@ -110,4 +111,3 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = 'login_url'
 LOGIN_REDIRECT_URL = 'show_worklist'
-

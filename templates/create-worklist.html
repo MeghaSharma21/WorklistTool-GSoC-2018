@@ -1,29 +1,21 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Worklist-Tool</title>
-	<meta name="theme-color" content="#323754">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="description" content="On this tool you can maintain worklists">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.2.1/jquery.js"></script>
-    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/popper.js/1.9.9/umd/popper.min.js"></script>
-    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href={% static "css/main.css" %}>
-</head>
-<body>
+{% extends 'base.html' %}
 
-	<div class="container">
+{% block scripts %}
+    <script src="{% static 'js/create-worklist.js' %}"></script>
+    <script src="{% static 'js/csrf-token-functions.js' %}"></script>
+{% endblock %}
 
-		{% if content.error == 0 %}
+{% block content %}
+    <div class="container">
+		<div id="alert-message-holder"></div>
+
+		{% if content.error == 1 %}
 			<div class="row">
 				<div class="col-md-4">
 				</div>
 				<div class="col-md-4">
 					<div class="alert alert-success" role="alert">
+					  <a href='#' class='close' data-dismiss='alert'>&times;</a>
 					  {{content.message}}
 					</div>
 				</div>
@@ -32,7 +24,9 @@
 				<div class="col-md-4">
 				</div>
 				<div class="col-md-4">
-					<p><a href="/worklist-tool">Click here</a> to see all the worklists</p>
+					<a role="button" class="btn btn-outline-primary" href="/worklist-tool/show-worklist">
+                        See all the worklists
+                    </a>
 				</div>
 			</div>
 		{% else %}
@@ -40,29 +34,35 @@
 				<div class="col-md-2">
 				</div>
 				<div class="col-md-8 create-worklist-container">
-					<h2>Create Worklist</h2>
-					<p><a href="/worklist-tool">Click here</a> to see all the worklists</p>
-					<form action="/worklist-tool/create-worklist" method="post">
-						{% csrf_token %}
-					  Name of Worklist: <input type="text" name="name" placeholder="Enter name of the new worklist you want to create...">
+					<h2 class="top-heading">Create Worklist</h2>
+					<a role="button" class="btn btn-outline-primary" href="/worklist-tool/show-worklist">
+                        See all the worklists
+                    </a>
+					<form onsubmit="return saveWorklist()">
+					  Name of Worklist: <input class="worklist-name" id="worklist-name" type="text" name="name"
+                                               placeholder="Enter name of the new worklist you want to create...">
 					  <br>
-					  Theme: <input type="text" name="theme" placeholder="Enter the theme to which it may belong...">
+					  Tags: <input class="worklist-tag" id="worklist-tags" type="text" name="tags"
+                                   placeholder="Enter the theme to which it may belong...">
 					  <br>
 					  <p>Description:</p>
-					  <textarea rows="4" cols="60" name="description"></textarea>
+					  <textarea class="worklist-description" id='worklist-description' rows="4" cols="60"
+                                name="description"></textarea>
 					  <br>
-					  Username: <input type="text" name="created_by" placeholder="Enter your wikipedia username...">
+					  PetScan Query ID: <input class="worklist-psid" id="worklist-psid" type="text" name="psid"
+                                               placeholder="Enter the PetScan Query ID to associate with this worklist...">
 					  <br>
-					  PetScan Query ID: <input type="text" name="psid" placeholder="Enter the PetScan Query ID to associate with this worklist...">
+					  <div id="articles-input" class="row">
+					  </div>
+					  <button type="button" class="btn btn-primary" onclick="addNewArticle();">Add more articles
+                          <i class="fa fa-plus-circle"></i></button>
 					  <br>
-					  <br>
-					  <input type="submit" value="Submit">
+						<button id="submit-btn" type="submit" class="btn btn-outline-success">
+						    Submit
+						</button>
 					</form>
 				</div>
 			</div>
 		{% endif %}
-
 	</div>
-
-</body>
-</html>
+{% endblock %}
