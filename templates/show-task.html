@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block scripts %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
     <script src="{% static 'js/csrf-token-functions.js' %}"></script>
     <script src="{% static 'js/show-task.js' %}"></script>
     <script type="text/javascript">
@@ -57,32 +59,34 @@
 
 				{% if tasks|length %}
 					<div class="row">
-						<table class="table table-bordered">
-							<thead>
-						      <tr>
-						        <th>Name</th>
-						        <th>Description</th>
-						        <th>Created By</th>
-						        <th>Status</th>
-						        <th>Progress</th>
-						        <th>Effort</th>
-						        <th>Claimed By</th>
-						      </tr>
-						    </thead>
-						    <tbody>
-							{% for task in tasks %}
-						      <tr>
-						        <td>{{task.article_name}} {% if logged_in_user and task.status == "open" or logged_in_user and task.status == "claimed" and task.claimed_by == logged_in_user %} <i class="fa fa-pencil-square-o" onclick="taskForm({{forloop.counter0}})"></i> {% endif %} </td>
-						        <td>{{task.description}}</td>
-						        <td>{{task.created_by}}</td>
-						        <td>{{task.status}}</td>
-						        <td>{{task.progress}}</td>
-						        <td>{{task.effort}}</td>
-						        <td>{{task.claimed_by}}</td>
-						      </tr>
-							{% endfor %}
-						    </tbody>
-						</table>
+						<div class="table-alignment">
+                            <table data-pagination="true" data-toggle="table" class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Created By</th>
+                                    <th>Status</th>
+                                    <th>Progress</th>
+                                    <th>Effort</th>
+                                    <th>Claimed By</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                {% for task in tasks %}
+                                  <tr>
+                                    <td>{{task.article_name}} {% if logged_in_user and task.status == "open" or logged_in_user and task.status == "claimed" and task.claimed_by == logged_in_user %} <i class="fa fa-pencil-square-o" onclick="taskForm({{forloop.counter0}})"></i> {% endif %} </td>
+                                    <td>{{task.description}}</td>
+                                    <td>{{task.created_by}}</td>
+                                    <td>{{task.status}}</td>
+                                    <td>{{task.progress}}</td>
+                                    <td>{{task.effort}}</td>
+                                    <td>{{task.claimed_by}}</td>
+                                  </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
 					</div>
 				{% else %}
 					<div class="row">

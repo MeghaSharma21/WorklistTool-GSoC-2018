@@ -18,11 +18,11 @@ class WorkList(models.Model):
     # Method to create a new entry in the table
     @staticmethod
     def create_object(data):
-        obj, created = WorkList.objects.get_or_create(name=data['name'],
-                                                      tags=data.get('tags', ''),
-                                                      description=data.get('description', ''),
-                                                      created_by=data['created_by'],
-                                                      psid=data.get('psid', 0))
+        obj, created = WorkList.objects.update_or_create(name=data['name'],
+                                                         tags=data.get('tags', ''),
+                                                         description=data.get('description', ''),
+                                                         created_by=data['created_by'],
+                                                         psid=data.get('psid', 0))
         return obj
 
 
@@ -47,12 +47,13 @@ class Articles(models.Model):
         if data.get('size') == '' or data.get('size') is None:
             data['size'] = 0
 
-        obj, created = Articles.objects.get_or_create(article_id=data.get('article_id', 0),
-                                                      name=data['name'],
-                                                      avg_page_views=data.get('avg_page_views', 0),
-                                                      projects=data.get('projects', ''),
-                                                      size=data.get('size', 0),
-                                                      grade=data.get('grade', ''))
+        obj, created = Articles.objects.update_or_create(name=data['name'],
+                                                         defaults={'article_id': data.get('article_id', 0),
+                                                                   'name': data['name'],
+                                                                   'avg_page_views': data.get('avg_page_views', 0),
+                                                                   'projects': data.get('projects', ''),
+                                                                   'size': data.get('size', 0),
+                                                                   'grade': data.get('grade', '')})
         return obj
 
 
@@ -92,12 +93,12 @@ class Task(models.Model):
         if data.get('status') == '' or data.get('status') is None:
             data['status'] = 0
 
-        Task.objects.get_or_create(worklist=data['worklist'],
-                                   article=data['article'],
-                                   psid=data.get('psid', 0),
-                                   description=data.get('description', ''),
-                                   status=data.get('status', 0),
-                                   progress=data.get('progress', 0),
-                                   effort=data.get('effort', 0),
-                                   claimed_by=data.get('claimed_by', ''),
-                                   created_by=data['created_by'])
+        Task.objects.update_or_create(worklist=data['worklist'],
+                                      article=data['article'],
+                                      psid=data.get('psid', 0),
+                                      description=data.get('description', ''),
+                                      status=data.get('status', 0),
+                                      progress=data.get('progress', 0),
+                                      effort=data.get('effort', 0),
+                                      claimed_by=data.get('claimed_by', ''),
+                                      created_by=data['created_by'])

@@ -23,3 +23,6 @@ SEARCH_BY_NAME_FOR_WORKLISTS = 'worklist_name'
 # Search type for searching of worklists - by
 # name of the user who had created it
 SEARCH_BY_USERNAME_FOR_WORKLISTS = 'username'
+
+# Default timeout for HTTP GET Request
+TIMEOUT_IN_SECONDS = 10

@@ -26,7 +26,7 @@
     text-align: center;
 }
 
-.wikicv-title {
+.wikihub-title {
     font-size: 14rem;
     margin-top: -8rem;
     margin-left: 7rem;
@@ -38,7 +38,8 @@
 
 .show-worklists-button {
     padding-right: 1rem;
-    width:100%; text-align: center
+    width:100%;
+    text-align: center
 }
 
 /* Homepage CSS ends */
@@ -67,6 +68,11 @@
 
 .no-left-padding {
     padding-left: 0 !important;
+}
+
+.table-alignment {
+    text-align: center;
+    width: 100%;
 }
 
 /* Base HTML CSS ends */
