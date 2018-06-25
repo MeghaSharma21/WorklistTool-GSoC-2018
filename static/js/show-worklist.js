@@ -10,8 +10,7 @@ function search_by_username() {
     $('#dropdownMenuButton').html('By Username');
 }
 
-
-$(window).on('load', function worker() {
+(window).on('load', function worker() {
      if($('#search_by_worklist_name').is(":visible") == true) {
                 search_term = document.getElementById("search_by_worklist_name_form").search_term.value
                 search_type = document.getElementById("search_by_worklist_name_form").search_type.value
@@ -22,7 +21,6 @@ $(window).on('load', function worker() {
 
             $('#worklist-table').html('');
             $('#worklist-table').addClass('loader');
-
             $('#worklist-table').html('').load(
             "/worklist-tool/update-worklist-table?search_term=" + search_term + "&search_type=" + search_type,
             function() {
