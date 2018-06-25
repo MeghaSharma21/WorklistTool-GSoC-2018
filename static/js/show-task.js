@@ -37,3 +37,23 @@ function saveTask() {
             );
     }});
 }
+
+$(window).on('load', function worker() {
+            search_term = document.getElementById("search_by_task_name_form").search_term.value
+            worklist_name = document.getElementById("search_by_task_name_form").worklist_name.value
+            worklist_created_by = document.getElementById("search_by_task_name_form").worklist_created_by.value
+
+
+            $('#task-table').html('');
+            $('#task-table').addClass('loader');
+
+            $('#task-table').html('').load(
+            "/worklist-tool/update-task-table?search_term=" + search_term + "&worklist_name=" +
+                worklist_name + "&worklist_created_by=" + worklist_created_by,
+            function() {
+              $('#task-table').removeClass('loader');
+            }
+            );
+
+            setTimeout(worker, 50000);
+});

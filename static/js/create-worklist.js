@@ -14,6 +14,11 @@ function addNewArticle() {
     $('#articles-input').append(html);
 }
 
+function load() {
+    $('#submit-btn').html("<i class='fa fa-spinner fa-spin '></i> Creating Worklist");
+    $(this).attr('disabled',true);
+}
+
 function saveWorklist() {
     var articlesArray = [];
 
@@ -58,6 +63,10 @@ function saveWorklist() {
                 " saving worklist. Please report Megha " +
                 "at meghasharma4910@gmail.com</div>"
             );
+        },
+        complete: function () {
+                $('#submit-btn').html("Submit");
+                $(this).attr('disabled',false);
         }
     });
     return false;

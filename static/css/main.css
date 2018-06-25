@@ -1,3 +1,22 @@
+/* table */
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+th,td {
+    word-wrap: break-word;
+}
+/* loader */
+.loader {
+    width: 100%;
+    height: 12rem !important;
+    z-index: 9999;
+    background: url('/worklist-tool/static/images/loading.gif') 50% 50% no-repeat;
+    background-size: auto auto;
+    background-size: 3rem;
+}
+
 /* Homepage CSS starts*/
 
 .error-message-holder {
@@ -36,10 +55,14 @@
     margin-top: -5rem;
 }
 
-.show-worklists-button {
+.worklists-button {
     padding-right: 1rem;
     width:100%;
-    text-align: center
+    text-align: center;
+}
+
+.show-worklists-button {
+    margin-right: 10px;
 }
 
 /* Homepage CSS ends */
@@ -75,6 +98,10 @@
     width: 100%;
 }
 
+.info-message {
+    margin-left: 10px;
+}
+
 /* Base HTML CSS ends */
 
 
@@ -86,18 +113,23 @@
 }
 
 .worklist-name {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
     width: 540px;
 }
 
 .worklist-tag {
+    margin-bottom: 1rem;
     width: 628px;
 }
 
 .worklist-description {
-    width: 686px
+    margin-bottom: 1rem;
+    width: 668px
 }
 
 .worklist-psid {
+    margin-bottom: 1rem;
     width: 535px
 }
 

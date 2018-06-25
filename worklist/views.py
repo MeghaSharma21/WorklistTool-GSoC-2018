@@ -3,9 +3,8 @@ import json
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 import logging
-from worklist.constants import SEARCH_BY_NAME_FOR_WORKLISTS, \
-    SEARCH_BY_USERNAME_FOR_WORKLISTS, ARTICLE_STATUS_TO_NUMBER_MAPPING, \
-    ARTICLE_NUMBER_TO_STATUS_MAPPING
+from worklist.constants import ARTICLE_STATUS_TO_NUMBER_MAPPING
+from worklist.views_helper_functions.search_helpers import search_worklist_helper, search_task_helper
 from worklist.views_helper_functions.store_articles import \
     store_added_articles, store_psid_articles
 from worklist.models import WorkList, Task
@@ -124,33 +123,18 @@ def search_worklist(request, username):
     search_term = request.GET.get('search_term', '')
     search_type = request.GET.get('search_type', '')
 
-    worklists = []
-    if search_type == '':
-        # Default type for search
-        search_type = SEARCH_BY_NAME_FOR_WORKLISTS
-
-    if search_term == '':
-        # Output all results in case search term is empty
-        results = WorkList.objects.all()
-    else:
-        # In either types the pattern is searched instead of complete names
-        if search_type == SEARCH_BY_NAME_FOR_WORKLISTS:
-            results = WorkList.objects.filter(name__icontains=search_term)
-        elif search_type == SEARCH_BY_USERNAME_FOR_WORKLISTS:
-            results = WorkList.objects.filter(created_by__icontains=search_term)
-
-    for result in results:
-        worklist = {
-            'name': result.name,
-            'tags': result.tags,
-            'description': result.description,
-            'created_by': result.created_by,
-            'psid': result.psid,
-        }
-
-        worklists.append(worklist)
+    worklists = search_worklist_helper(search_term, search_type)
 
     return render(request, 'show-worklist.html', {'results': worklists, 'logged_in_user': username})
+
+
+# View to update the table displaying all worklists
+def update_worklist_table(request):
+    search_term = request.GET.get('search_term', '')
+    search_type = request.GET.get('search_type', '')
+
+    worklists = search_worklist_helper(search_term, search_type)
+    return render(request, 'show-worklist-table.html', {'results': worklists})
 
 
 # View to search a task by it's name
@@ -159,30 +143,8 @@ def search_task(request, username):
     search_term = request.GET.get('search_term', '')
     worklist_name = request.GET.get('worklist_name', '')
     worklist_created_by = request.GET.get('worklist_created_by', '')
-    tasks = []
 
-    if search_term == '':
-        # Output all tasks of that worklist in case search term is empty
-        results = Task.objects.filter(worklist__name=worklist_name,
-                                      worklist__created_by=worklist_created_by)
-    else:
-        # Here the pattern is searched instead of complete names
-        results = Task.objects.filter(worklist__name=worklist_name,
-                                      worklist__created_by=worklist_created_by,
-                                      article__name__icontains=search_term)
-
-    for result in results:
-        task = {
-            'article_name': result.article.name,
-            'description': result.description,
-            'created_by': result.created_by,
-            'status': ARTICLE_NUMBER_TO_STATUS_MAPPING[result.status],
-            'progress': result.progress,
-            'effort': result.effort,
-            'claimed_by': result.claimed_by
-        }
-
-        tasks.append(task)
+    tasks = search_task_helper(search_term, worklist_name, worklist_created_by)
 
     return render(request, 'show-task.html', {'tasks': tasks,
                                               'worklist_name': worklist_name,
@@ -190,6 +152,17 @@ def search_task(request, username):
                                               'logged_in_user': username})
 
 
+# View to update the table displaying all tasks of a worklist
+def update_task_table(request):
+    search_term = request.GET.get('search_term', '')
+    worklist_name = request.GET.get('worklist_name', '')
+    worklist_created_by = request.GET.get('worklist_created_by', '')
+
+    tasks = search_task_helper(search_term, worklist_name, worklist_created_by)
+    return render(request, 'show-task-table.html', {'tasks': tasks})
+
+
+# Update task information when user edits it
 @login_required
 def update_task_info(request):
     username = request.user.username
@@ -211,3 +184,37 @@ def update_task_info(request):
     results.update(progress=progress, status=status_code, claimed_by=claimed_by)
 
     return JsonResponse({'success': True})
+
+
+# View to display worklists created or being worked upon by the logged-in user
+@login_required
+def show_user_worklists(request):
+    created_worklists = []
+    worked_upon_worklists = []
+    username = request.user.username
+    results = WorkList.objects.filter(created_by=username)
+
+    for result in results:
+        worklist = {
+            'name': result.name,
+            'tags': result.tags,
+            'description': result.description,
+            'psid': result.psid,
+        }
+
+        created_worklists.append(worklist)
+
+    results = Task.objects.filter(claimed_by=username)
+
+    for result in results:
+        worklist = {
+            'name': result.worklist.name,
+            'tags': result.worklist.tags,
+            'description': result.worklist.description,
+            'psid': result.worklist.psid,
+        }
+
+        worked_upon_worklists.append(worklist)
+
+    return render(request, 'user-worklists.html', {'created_worklists': created_worklists,
+                                                   'worked_upon_worklists': worked_upon_worklists})

@@ -31,9 +31,7 @@
 {% block content %}
 	<div class="container">
 		<div class="row">
-			<div class="col-md-2">
-			</div>
-			<div class="col-md-8 create-worklist-container">
+			<div class="col-md-12 create-worklist-container">
 				<h2 class="top-heading">Worklist Name: {{worklist_name}}</h2>
 				<div class="row">
 					<div class="col-md-6 no-left-padding">
@@ -41,7 +39,7 @@
                            href="/worklist-tool/show-worklist">See all the worklists</a>
 					</div>
 					<div id="search_by_task_name" class="col-md-6">
-						<form action="/worklist-tool/show-tasks" method="get">
+						<form id="search_by_task_name_form" action="/worklist-tool/show-tasks" method="get">
 							<input type="text" name="search_term"
                                    placeholder="Search task">
 							<input class="hidden" id="task_name" type="text"
@@ -56,47 +54,9 @@
 						</form>
 					</div>
 				</div>
-
-				{% if tasks|length %}
-					<div class="row">
-						<div class="table-alignment">
-                            <table data-pagination="true" data-toggle="table" class="table table-bordered">
-                                <thead>
-                                  <tr>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Created By</th>
-                                    <th>Status</th>
-                                    <th>Progress</th>
-                                    <th>Effort</th>
-                                    <th>Claimed By</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                {% for task in tasks %}
-                                  <tr>
-                                    <td>{{task.article_name}} {% if logged_in_user and task.status == "open" or logged_in_user and task.status == "claimed" and task.claimed_by == logged_in_user %} <i class="fa fa-pencil-square-o" onclick="taskForm({{forloop.counter0}})"></i> {% endif %} </td>
-                                    <td>{{task.description}}</td>
-                                    <td>{{task.created_by}}</td>
-                                    <td>{{task.status}}</td>
-                                    <td>{{task.progress}}</td>
-                                    <td>{{task.effort}}</td>
-                                    <td>{{task.claimed_by}}</td>
-                                  </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-					</div>
-				{% else %}
-					<div class="row">
-						<div class="alert alert-warning" role="alert">
-						  <a href='#' class='close' data-dismiss='alert'>  &times;</a>
-						  Oops! No task added yet!
-						</div>
-					</div>
-				{% endif %}
-
+                <div id="task-table">
+                    {% include 'show-task-table.html' %}
+                </div>
 			</div>
 		</div>
 	</div>

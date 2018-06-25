@@ -1,0 +1,12 @@
+[client]
+host = tools.db.svc.eqiad.wmflabs
+database = s53701__worklist
+password = <<PASSWORD>>
+user = <<USER ID>>
+
+[mysqld]
+innodb_file_format = Barracuda
+innodb_file_per_table = 1
+innodb_large_prefix = 1
+
+

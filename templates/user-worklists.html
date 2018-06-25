@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+{#    <script src="{% static 'js/show-worklist.js' %}"></script>#}
+    <style type="text/css">
+    	.nav-pills > li.active > a,
+        .nav-pills > li.active > a:hover,
+        .nav-pills > li.active > a:focus {
+          color: #555555;
+          cursor: default;
+          background-color: #ffffff;
+          border: 1px solid #dddddd;
+          border-bottom-color: transparent;
+          }
+    </style>
+{%  endblock %}
+
+
+{% block content %}
+<div class="container">
+        <ul class="nav nav-pills nav-justified" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" role="tab" href="#created-lists">Created Worklists</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" href="#working-lists">Worked Upon Worklists</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" id="created-lists" class="tab-pane active">
+                {% with created_worklists as results %}
+                  <div id="worklist-table">
+                    {% include 'show-worklist-table.html' %}
+                  </div>
+                {% endwith %}
+            </div>
+            <div role="tabpanel" id="working-lists" class="tab-pane">
+                {% with worked_upon_worklists as results %}
+                  <div id="worklist-table">
+                    {% include 'show-worklist-table.html' %}
+                  </div>
+                {% endwith %}
+            </div>
+        </div>
+</div>
+
+{%  endblock %}

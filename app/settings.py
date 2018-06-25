@@ -6,7 +6,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.environ.get('django_secret')
+SECRET_KEY = 'afdghfdhgfasewrethgnh'
 SOCIAL_AUTH_MEDIAWIKI_KEY = os.environ.get('mediawiki_key')
 SOCIAL_AUTH_MEDIAWIKI_SECRET = os.environ.get('mediawiki_secret')
 SOCIAL_AUTH_MEDIAWIKI_URL = 'https://meta.wikimedia.org/w/index.php'
@@ -65,8 +65,11 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+                'read_default_file': '~/database.cnf',
+                'init_command': 'SET default_storage_engine=INNODB',
+        },
     }
 }
 
@@ -111,3 +114,9 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = 'login_url'
 LOGIN_REDIRECT_URL = 'show_worklist'
+
+# Tweaking variables to avoid exceeding of limit in social-django
+SOCIAL_AUTH_UID_LENGTH = 190
+SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 190
+SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 190
+SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 190

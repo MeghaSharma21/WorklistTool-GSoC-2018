@@ -1,0 +1,39 @@
+{% if tasks|length %}
+    <div class="row">
+        <div class="table-alignment">
+            <table data-pagination="true" data-toggle="table" class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th data-sortable="true">Name</th>
+                    <th>Description</th>
+                    <th>Created By</th>
+                    <th>Status</th>
+                    <th data-sortable="true">Progress</th>
+                    <th data-sortable="true">Effort</th>
+                    <th>Claimed By</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for task in tasks %}
+                  <tr>
+                    <td>{{task.article_name}} {% if logged_in_user and task.status == "open" or logged_in_user and task.status == "claimed" and task.claimed_by == logged_in_user %} <i class="fa fa-pencil-square-o" onclick="taskForm({{forloop.counter0}})"></i> {% endif %} </td>
+                    <td>{{task.description}}</td>
+                    <td>{{task.created_by}}</td>
+                    <td>{{task.status}}</td>
+                    <td>{{task.progress}}</td>
+                    <td>{{task.effort}}</td>
+                    <td>{{task.claimed_by}}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <div class="row">
+        <div class="alert alert-warning" role="alert">
+          <a href='#' class='close info-message' data-dismiss='alert'>  &times;</a>
+          Oops! No task added yet!
+        </div>
+    </div>
+{% endif %}
