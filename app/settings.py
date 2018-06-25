@@ -6,7 +6,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = 'afdghfdhgfasewrethgnh'
+SECRET_KEY = os.environ.get('django_secret')
 SOCIAL_AUTH_MEDIAWIKI_KEY = os.environ.get('mediawiki_key')
 SOCIAL_AUTH_MEDIAWIKI_SECRET = os.environ.get('mediawiki_secret')
 SOCIAL_AUTH_MEDIAWIKI_URL = 'https://meta.wikimedia.org/w/index.php'
