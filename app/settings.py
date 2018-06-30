@@ -115,7 +115,10 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_URL = 'login_url'
 LOGIN_REDIRECT_URL = 'show_worklist'
 
-# Tweaking variables to avoid exceeding of limit in social-django
+# Tweaking variables to avoid error because of exceeding of column size limit(767 bytes) in social-django.
+# This error is mainly because Toolforge uses MariaDB version 10.0.34 and it limits the column size to
+# 767 bytes. This problem will go away once the version is upgraded on Toolforge.
+# For details, refer to this ticket: https://phabricator.wikimedia.org/T198508
 SOCIAL_AUTH_UID_LENGTH = 190
 SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 190
 SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 190

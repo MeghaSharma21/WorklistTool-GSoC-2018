@@ -108,9 +108,9 @@ th,td {
 
 /* Create Worklists HTML CSS starts */
 
-#submit-btn {
+#submit_btn {
     display: block;
-    margin: auto;
+    margin: 20px auto auto;
 }
 
 .worklist-name {
@@ -146,3 +146,12 @@ th,td {
     width: 644px;
 }
 /* Create Worklists CSS ends */
+
+
+/* User Worklists CSS starts */
+
+.tab-panel-space {
+    margin-bottom: 20px;
+}
+
+/* User Worklists CSS ends */

@@ -11,7 +11,6 @@ from worklist.models import WorkList, Task
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
-
 logger = logging.getLogger('django')
 
 
@@ -35,7 +34,6 @@ def app_logout(request):
 
 
 def with_logged_in_user(view):
-
     @functools.wraps(view)
     def inner_method(request):
         user_or_none = None
@@ -72,7 +70,7 @@ def create_worklist(request):
                 'description': request.POST.get('description', ''),
                 'created_by': username,
                 'psid': request.POST.get('psid', 0),  # As database stores blank integer
-                                                      # field as zero
+                # field as zero
                 'articles': json.loads(request.POST.get('articles', "[]"))
                 }
         content['created_by'] = data['created_by']
@@ -189,32 +187,16 @@ def update_task_info(request):
 # View to display worklists created or being worked upon by the logged-in user
 @login_required
 def show_user_worklists(request):
-    created_worklists = []
-    worked_upon_worklists = []
     username = request.user.username
-    results = WorkList.objects.filter(created_by=username)
 
-    for result in results:
-        worklist = {
-            'name': result.name,
-            'tags': result.tags,
-            'description': result.description,
-            'psid': result.psid,
-        }
+    def worklist_to_dict(worklist):
+        return {'name': worklist.name, 'tags': worklist.tags,
+                'description': worklist.description, 'psid': worklist.psid}
 
-        created_worklists.append(worklist)
+    created_worklists = \
+        map(worklist_to_dict, WorkList.objects.filter(created_by=username))
+    worked_upon_worklists = \
+        map(worklist_to_dict, [r.worklist for r in Task.objects.filter(claimed_by=username)])
 
-    results = Task.objects.filter(claimed_by=username)
-
-    for result in results:
-        worklist = {
-            'name': result.worklist.name,
-            'tags': result.worklist.tags,
-            'description': result.worklist.description,
-            'psid': result.worklist.psid,
-        }
-
-        worked_upon_worklists.append(worklist)
-
-    return render(request, 'user-worklists.html', {'created_worklists': created_worklists,
-                                                   'worked_upon_worklists': worked_upon_worklists})
+    return render(request, 'user-worklists.html', {'created_worklists': list(created_worklists),
+                                                   'worked_upon_worklists': list(worked_upon_worklists)})

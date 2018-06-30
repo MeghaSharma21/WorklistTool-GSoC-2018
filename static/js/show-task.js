@@ -4,7 +4,7 @@ var worklist_created_by;
 
 function populateModal(task) {
     $('#exampleModalLongTitle').html(task.article_name);
-    $('#task-progress').val(task.progress);
+    $('#task_progress').val(task.progress);
     $('input:radio[name=status][value='+task.status +']').prop("checked",true);
 }
 
@@ -22,7 +22,7 @@ function saveTask() {
             'worklist_created_by': worklist_created_by,
             'article_name': $('#exampleModalLongTitle').html(),
             'status': $('input:radio[name=status]:checked').val(),
-            'progress': $('#task-progress').val(),
+            'progress': $('#task_progress').val(),
         },
         success: function (data) {
             window.location.reload(true);
@@ -39,17 +39,17 @@ function saveTask() {
 }
 
 $(window).on('load', function worker() {
-            search_term = document.getElementById("search_by_task_name_form").search_term.value
-            worklist_name = document.getElementById("search_by_task_name_form").worklist_name.value
-            worklist_created_by = document.getElementById("search_by_task_name_form").worklist_created_by.value
+            search_term = document.getElementById("search_by_task_name_form").search_term.value;
+            worklist_name = document.getElementById("search_by_task_name_form").worklist_name.value;
+            worklist_created_by = document.getElementById("search_by_task_name_form").worklist_created_by.value;
 
-            $('#task-table').html('');
-            $('#task-table').addClass('loader');
-            $('#task-table').html('').load(
+            $('#task_table').html('');
+            $('#task_table').addClass('loader');
+            $('#task_table').html('').load(
             "/worklist-tool/update-task-table?search_term=" + search_term + "&worklist_name=" +
                 worklist_name + "&worklist_created_by=" + worklist_created_by,
             function() {
-              $('#task-table').removeClass('loader');
+              $('#task_table').removeClass('loader');
             }
             );
 
