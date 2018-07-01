@@ -10,8 +10,8 @@ function search_by_username() {
     $('#dropdownMenuButton').html('By Username');
 }
 
-$(window).on('load', function worker() {
-     if($('#search_by_worklist_name').is(":visible") == true) {
+function refresh() {
+         if($('#search_by_worklist_name').is(":visible") == true) {
                 search_term = document.getElementById("search_by_worklist_name_form").search_term.value
                 search_type = document.getElementById("search_by_worklist_name_form").search_type.value
             } else {
@@ -21,12 +21,19 @@ $(window).on('load', function worker() {
 
             $('#worklist_table').html('');
             $('#worklist_table').addClass('loader');
-            $('#worklist_table').html('').load(
-            "/worklist-tool/update-worklist-table?search_term=" + search_term + "&search_type=" + search_type,
+            $('#worklist_table').html('').load("/worklist-tool/update-worklist-table?search_term=" +
+                encodeURIComponent(search_term) + "&search_type=" + encodeURIComponent(search_type),
             function() {
               $('#worklist_table').removeClass('loader');
             }
             );
+}
 
+function worker() {
+            refresh();
             setTimeout(worker, 50000);
+}
+
+$(window).on('load', function(){
+    setTimeout(worker, 50000);
 });

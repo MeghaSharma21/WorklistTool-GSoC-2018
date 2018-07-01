@@ -38,20 +38,27 @@ function saveTask() {
     }});
 }
 
-$(window).on('load', function worker() {
-            search_term = document.getElementById("search_by_task_name_form").search_term.value;
-            worklist_name = document.getElementById("search_by_task_name_form").worklist_name.value;
-            worklist_created_by = document.getElementById("search_by_task_name_form").worklist_created_by.value;
+function refresh() {
+        search_term = document.getElementById("search_by_task_name_form").search_term.value;
+        worklist_name = document.getElementById("search_by_task_name_form").worklist_name.value;
+        worklist_created_by = document.getElementById("search_by_task_name_form").worklist_created_by.value;
 
-            $('#task_table').html('');
-            $('#task_table').addClass('loader');
-            $('#task_table').html('').load(
-            "/worklist-tool/update-task-table?search_term=" + search_term + "&worklist_name=" +
-                worklist_name + "&worklist_created_by=" + worklist_created_by,
-            function() {
-              $('#task_table').removeClass('loader');
-            }
-            );
+        $('#task_table').html('');
+        $('#task_table').addClass('loader');
+        $('#task_table').html('').load(
+        "/worklist-tool/update-task-table?search_term=" + encodeURIComponent(search_term) + "&worklist_name=" +
+            encodeURIComponent(worklist_name) + "&worklist_created_by=" + encodeURIComponent(worklist_created_by),
+        function() {
+          $('#task_table').removeClass('loader');
+        }
+        );
+}
 
-            setTimeout(worker, 50000);
+function worker() {
+        refresh();
+        setTimeout(worker, 50000);
+}
+
+$(window).on('load', function() {
+    setTimeout(worker, 50000);
 });

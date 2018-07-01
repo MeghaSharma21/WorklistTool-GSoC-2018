@@ -1,3 +1,13 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task-Table</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+</head>
+
+<body>
 {% if tasks|length %}
     <div class="row">
         <div class="table-alignment">
@@ -37,3 +47,5 @@
         </div>
     </div>
 {% endif %}
+</body>
+</html>

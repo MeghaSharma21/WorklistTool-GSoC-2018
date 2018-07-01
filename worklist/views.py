@@ -191,7 +191,8 @@ def show_user_worklists(request):
 
     def worklist_to_dict(worklist):
         return {'name': worklist.name, 'tags': worklist.tags,
-                'description': worklist.description, 'psid': worklist.psid}
+                'description': worklist.description, 'psid': worklist.psid,
+                'created_by': worklist.created_by}
 
     created_worklists = \
         map(worklist_to_dict, WorkList.objects.filter(created_by=username))

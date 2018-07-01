@@ -31,19 +31,15 @@
                                    placeholder="Search worklist">
 							<input class="hidden" id="worklist_name" type="text"
                                    name="search_type" value="worklist_name">
-							<button type="submit" class="btn btn-outline-secondary">
-							    <i class="fa fa-search"></i>
-							</button>
+							<input type="submit" class="btn btn-outline-secondary" value="Search"  onclick="refresh();return false;">
 						</form>
 					</div>
 					<div class="hidden col-md-8" id="search_by_username">
-						<form id="search_by_username_form" action="/worklist-tool/show-worklist" method="get">
+						<form id="search_by_username_form">
 							<input type="text" name="search_term" placeholder="Search worklist">
 							<input class="hidden" id="username" type="text"
                                    name="search_type" value="username">
-							<button type="submit" class="btn btn-outline-secondary">
-							    <i class="fa fa-search"></i>
-							</button>
+                            <input type="submit" class="btn btn-outline-secondary" value="Search" onclick="refresh();return false;">
 						</form>
 					</div>
 					<div class="col-md-2">
