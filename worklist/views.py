@@ -70,7 +70,7 @@ def create_worklist(request):
                 'description': request.POST.get('description', ''),
                 'created_by': username,
                 'psid': request.POST.get('psid', 0),  # As database stores blank integer
-                # field as zero
+                                                      # field as zero
                 'articles': json.loads(request.POST.get('articles', "[]"))
                 }
         content['created_by'] = data['created_by']
