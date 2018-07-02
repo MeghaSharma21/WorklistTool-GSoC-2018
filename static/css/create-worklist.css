@@ -1,0 +1,37 @@
+#submit_btn {
+    display: block;
+    margin: 20px auto auto;
+}
+
+.worklist-name {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    width: 540px;
+}
+
+.worklist-tag {
+    margin-bottom: 1rem;
+    width: 628px;
+}
+
+.worklist-description {
+    margin-bottom: 1rem;
+    width: 668px
+}
+
+.worklist-psid {
+    margin-bottom: 1rem;
+    width: 535px
+}
+
+.article-name{
+    width: 572px;
+}
+
+.article-description{
+    width: 600px;
+}
+
+.article-effort{
+    width: 644px;
+}

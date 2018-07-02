@@ -12,11 +12,11 @@ function search_by_username() {
 
 function refresh() {
     if($('#search_by_worklist_name').is(":visible") == true) {
-        search_term = document.getElementById("search_by_worklist_name_form").search_term.value
-        search_type = document.getElementById("search_by_worklist_name_form").search_type.value
+        search_term = $("#search_by_worklist_name_form input[name=search_term]").val();
+        search_type = $("#search_by_worklist_name_form input[name=search_type]").val();
     } else {
-        search_term = document.getElementById("search_by_username_form").search_term.value
-        search_type = document.getElementById("search_by_username_form").search_type.value
+        search_term = $("#search_by_username_form input[name=search_term]").val();
+        search_type = $("#search_by_username_form input[name=search_type]").val();
     }
 
     $('#worklist_table').html('');

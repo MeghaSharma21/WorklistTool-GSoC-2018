@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block scripts %}
+    <link rel="stylesheet" type="text/css" href={% static "css/create-worklist.css" %}>
     <script src="{% static 'js/create-worklist.js' %}"></script>
     <script src="{% static 'js/csrf-token-functions.js' %}"></script>
 {% endblock %}

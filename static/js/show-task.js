@@ -39,9 +39,9 @@ function saveTask() {
 }
 
 function refresh() {
-    search_term = document.getElementById("search_by_task_name_form").search_term.value;
-    worklist_name = document.getElementById("search_by_task_name_form").worklist_name.value;
-    worklist_created_by = document.getElementById("search_by_task_name_form").worklist_created_by.value;
+    search_term = $("#search_by_task_name_form input[name=search_term]").val();
+    worklist_name = $("#search_by_task_name_form input[name=worklist_name]").val();
+    worklist_created_by = $("#search_by_task_name_form input[name=worklist_created_by]").val();
 
     $('#task_table').html('');
     $('#task_table').addClass('loader');
