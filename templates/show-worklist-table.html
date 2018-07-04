@@ -5,6 +5,20 @@
     <title>Worklist-Table</title>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        worklists = {{results|safe}};
+        worklist_names = [];
+        usernames = [];
+        $.each(worklists, function(index, value){
+            worklist_names.push(value.name);
+            usernames.push(value.created_by);
+        });
+
+        awesomplete_by_worklist_name.list = worklist_names;
+        awesomplete_by_username.list = Array.from(new Set(usernames));
+    });
+    </script>
 </head>
 
 <body>

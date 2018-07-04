@@ -3,7 +3,25 @@
 {% block scripts %}
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.2/awesomplete.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.2/awesomplete.js" async></script>
     <script src="{% static 'js/show-worklist.js' %}"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        worklists = {{results|safe}};
+        input_by_worklist_name = document.getElementById("search_by_worklist_name_input");
+        input_by_username = document.getElementById("search_by_username_input");
+	    awesomplete_by_worklist_name = new Awesomplete(input_by_worklist_name);
+	    awesomplete_by_username = new Awesomplete(input_by_username);
+	    $.each(worklists, function(index, value){
+	        worklist_names.push(value.name);
+	        usernames.push(value.created_by);
+	    });
+	    input_by_worklist_name.list = worklist_names;
+	    input_by_username.list = Array.from(new Set(usernames));
+	    setTimeout(worker, 50000);
+    });
+    </script>
     <style type="text/css">
     	input[name=search_term] {
     		padding: 6px;
@@ -27,7 +45,7 @@
 					</div>
 					<div id="search_by_worklist_name" class="col-md-8">
 						<form id="search_by_worklist_name_form" action="/worklist-tool/show-worklist" method="get">
-							<input type="text" name="search_term"
+							<input id="search_by_worklist_name_input" type="text" name="search_term"
                                    placeholder="Search worklist">
 							<input class="hidden" id="worklist_name" type="text"
                                    name="search_type" value="worklist_name">
@@ -36,7 +54,7 @@
 					</div>
 					<div class="hidden col-md-8" id="search_by_username">
 						<form id="search_by_username_form">
-							<input type="text" name="search_term" placeholder="Search worklist">
+							<input id="search_by_username_input" type="text" name="search_term" placeholder="Search worklist">
 							<input class="hidden" id="username" type="text"
                                    name="search_type" value="username">
                             <input type="submit" class="btn btn-outline-secondary" value="Search" onclick="refresh();return false;">
