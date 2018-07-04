@@ -1,0 +1,5 @@
+[client]
+host = tools.db.svc.eqiad.wmflabs
+database = s53701__worklist
+password = <<PASSWORD>>
+user = <<USER ID>>

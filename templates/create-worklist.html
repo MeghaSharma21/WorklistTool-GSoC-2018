@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block scripts %}
+    <link rel="stylesheet" type="text/css" href={% static "css/create-worklist.css" %}>
     <script src="{% static 'js/create-worklist.js' %}"></script>
     <script src="{% static 'js/csrf-token-functions.js' %}"></script>
 {% endblock %}
@@ -39,25 +40,25 @@
                         See all the worklists
                     </a>
 					<form onsubmit="return saveWorklist()">
-					  Name of Worklist: <input class="worklist-name" id="worklist-name" type="text" name="name"
+					  Name of Worklist: <input class="worklist-name" id="worklist_name" type="text" name="name"
                                                placeholder="Enter name of the new worklist you want to create...">
 					  <br>
-					  Tags: <input class="worklist-tag" id="worklist-tags" type="text" name="tags"
+					  Tags: <input class="worklist-tag" id="worklist_tags" type="text" name="tags"
                                    placeholder="Enter the theme to which it may belong...">
 					  <br>
 					  <p>Description:</p>
-					  <textarea class="worklist-description" id='worklist-description' rows="4" cols="60"
+					  <textarea class="worklist-description" id="worklist_description" rows="4" cols="60"
                                 name="description"></textarea>
 					  <br>
-					  PetScan Query ID: <input class="worklist-psid" id="worklist-psid" type="text" name="psid"
+					  PetScan Query ID: <input class="worklist-psid" id="worklist_psid" type="text" name="psid"
                                                placeholder="Enter the PetScan Query ID to associate with this worklist...">
 					  <br>
-					  <div id="articles-input" class="row">
+					  <div id="articles_input" class="row">
 					  </div>
 					  <button type="button" class="btn btn-primary" onclick="addNewArticle();">Add more articles
                           <i class="fa fa-plus-circle"></i></button>
 					  <br>
-						<button id="submit-btn" type="submit" class="btn btn-outline-success">
+						<button id="submit_btn" type="submit" class="btn btn-outline-success">
 						    Submit
 						</button>
 					</form>

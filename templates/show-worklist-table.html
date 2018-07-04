@@ -1,0 +1,50 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Worklist-Table</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+</head>
+
+<body>
+    {% if results|length %}
+    <div class="row">
+        <div class="table-alignment">
+            <table data-pagination="true" data-toggle="table" class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th data-sortable="true">Name</th>
+                    <th>Tags</th>
+                    <th>Description</th>
+                    <th>Created By</th>
+                    <th>PetScan Query ID</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for worklist in results %}
+                  <tr>
+                    <td>
+                        <a href="/worklist-tool/show-tasks?worklist_name={{worklist.name}}&worklist_created_by={{worklist.created_by}}">{{worklist.name}}
+                        </a>
+                    </td>
+                    <td>{{worklist.tags}}</td>
+                    <td>{{worklist.description}}</td>
+                    <td>{{worklist.created_by}}</td>
+                    <td>{{worklist.psid}}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="alert alert-warning" role="alert">
+          <a href='#' class='close info-message' data-dismiss='alert'>&times;</a>
+          Oops! No Worklist Exists!
+        </div>
+    </div>
+    {% endif %}
+</body>
+</html>

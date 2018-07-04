@@ -1,0 +1,51 @@
+body {
+    font-size: 10px;
+    font-family: 'Roboto', ! sans-serif important;
+    word-spacing: 1px;
+}
+
+.error-message-holder {
+    position: fixed;
+    left: 50%;
+    width: 600px;
+    margin-left: -300px;
+    z-index: 2000;
+    text-align: center;
+}
+
+.home-page-error {
+    font-size: 14px;
+}
+
+.homepage-clipboard-icon {
+    padding-top: 3rem;
+}
+
+.graduation {
+    font-size: 13rem;
+}
+
+.home-page-text {
+    width: 100%;
+    text-align: center;
+}
+
+.wikihub-title {
+    font-size: 14rem;
+    margin-top: -8rem;
+    margin-left: 7rem;
+}
+
+.baseline {
+    margin-top: -5rem;
+}
+
+.worklists-button {
+    padding-right: 1rem;
+    width:100%;
+    text-align: center;
+}
+
+.show-worklists-button {
+    margin-right: 10px;
+}

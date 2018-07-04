@@ -4,7 +4,7 @@ var worklist_created_by;
 
 function populateModal(task) {
     $('#exampleModalLongTitle').html(task.article_name);
-    $('#task-progress').val(task.progress);
+    $('#task_progress').val(task.progress);
     $('input:radio[name=status][value='+task.status +']').prop("checked",true);
 }
 
@@ -22,7 +22,7 @@ function saveTask() {
             'worklist_created_by': worklist_created_by,
             'article_name': $('#exampleModalLongTitle').html(),
             'status': $('input:radio[name=status]:checked').val(),
-            'progress': $('#task-progress').val(),
+            'progress': $('#task_progress').val(),
         },
         success: function (data) {
             window.location.reload(true);
@@ -37,3 +37,28 @@ function saveTask() {
             );
     }});
 }
+
+function refresh() {
+    search_term = $("#search_by_task_name_form input[name=search_term]").val();
+    worklist_name = $("#search_by_task_name_form input[name=worklist_name]").val();
+    worklist_created_by = $("#search_by_task_name_form input[name=worklist_created_by]").val();
+
+    $('#task_table').html('');
+    $('#task_table').addClass('loader');
+    $('#task_table').html('').load(
+    "/worklist-tool/update-task-table?search_term=" + encodeURIComponent(search_term) + "&worklist_name=" +
+        encodeURIComponent(worklist_name) + "&worklist_created_by=" + encodeURIComponent(worklist_created_by),
+    function() {
+      $('#task_table').removeClass('loader');
+    }
+    );
+}
+
+function worker() {
+    refresh();
+    setTimeout(worker, 50000);
+}
+
+$(window).on('load', function() {
+    setTimeout(worker, 50000);
+});
