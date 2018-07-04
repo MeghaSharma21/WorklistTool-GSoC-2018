@@ -1,3 +1,11 @@
+var worklists = [];
+var worklist_names = [];
+var usernames = [];
+var input_by_worklist_name;
+var input_by_username;
+var awesomplete_by_worklist_name;
+var awesomplete_by_username;
+
 function search_by_worklist_name() {
     $('#search_by_worklist_name').removeClass('hidden');
     $('#search_by_username').addClass('hidden');
@@ -33,7 +41,3 @@ function worker() {
     refresh();
     setTimeout(worker, 50000);
 }
-
-$(window).on('load', function(){
-    setTimeout(worker, 50000);
-});

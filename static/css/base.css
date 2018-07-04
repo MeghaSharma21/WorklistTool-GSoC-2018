@@ -1,3 +1,9 @@
+.awesomplete > ul {
+    width: 100px !important;
+    word-wrap: break-word;
+    text-align: left;
+}
+
 /* table */
 table {
     table-layout: fixed;
@@ -17,6 +23,14 @@ th,td {
     background-size: auto auto;
     background-size: 3rem;
 }
+
+/* Homepage CSS starts*/
+
+
+/* Homepage CSS ends */
+
+
+/* Base HTML CSS starts */
 
 .hidden {
     display: none;
