@@ -7,18 +7,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.2/awesomplete.js" async></script>
     <script src="{% static 'js/show-worklist.js' %}"></script>
     <script type="text/javascript">
+    var worklists = [];
+    var input_by_worklist_name;
+    var input_by_username;
+    var awesomplete_by_worklist_name;
+    var awesomplete_by_username;
+
     $(document).ready(function(){
         worklists = {{results|safe}};
         input_by_worklist_name = document.getElementById("search_by_worklist_name_input");
         input_by_username = document.getElementById("search_by_username_input");
 	    awesomplete_by_worklist_name = new Awesomplete(input_by_worklist_name);
 	    awesomplete_by_username = new Awesomplete(input_by_username);
-	    $.each(worklists, function(index, value){
-	        worklist_names.push(value.name);
-	        usernames.push(value.created_by);
-	    });
-	    input_by_worklist_name.list = worklist_names;
-	    input_by_username.list = Array.from(new Set(usernames));
+	    input_by_worklist_name.list = worklists.map(worklist => worklist.name);
+	    input_by_username.list = Array.from(new Set(worklists.map(worklist => worklist.created_by)));
+
 	    setTimeout(worker, 50000);
     });
     </script>

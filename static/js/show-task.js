@@ -1,9 +1,7 @@
 var tasks;
 var worklist_name;
 var worklist_created_by;
-var task_names = [];
 var input;
-var awesomplete;
 
 function populateModal(task) {
     $('#exampleModalLongTitle').html(task.article_name);

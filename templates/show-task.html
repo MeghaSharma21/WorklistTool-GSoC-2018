@@ -8,17 +8,17 @@
     <script src="{% static 'js/csrf-token-functions.js' %}"></script>
     <script src="{% static 'js/show-task.js' %}"></script>
     <script type="text/javascript">
+    var awesomplete;
+
     $(document).ready(function(){
         tasks = {{tasks|safe}};
         worklist_name = "{{worklist_name}}";
         worklist_created_by = "{{worklist_created_by}}";
         input = $("#search_task_autocomplete");
 	    awesomplete = new Awesomplete(input);
-	    $.each(tasks, function(index, value){
-	        task_names.push(value.article_name);
-	    });
-	    awesomplete.list = task_names;
-	    setTimeout(worker, 50000);
+        awesomplete.list = tasks.map(task => task.article_name);
+
+        setTimeout(worker, 50000);
     });
     </script>
 
