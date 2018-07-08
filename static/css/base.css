@@ -1,7 +1,3 @@
-.navbar-brand {
-   width: 8rem;
-}
-
 .awesomplete > ul {
     width: 100px !important;
     word-wrap: break-word;
@@ -41,9 +37,6 @@ th,td {
 .top-heading {
     text-align: center;
     padding-top: 0.5rem;
-    margin-bottom: 1.5rem;
-    display: inline-block;
-    margin-left: 23rem;
 }
 
 .row .row {
@@ -52,10 +45,6 @@ th,td {
 
 .no-left-padding {
     padding-left: 0 !important;
-}
-
-.no-right-padding {
-    padding-right: 0 !important;
 }
 
 .table-alignment {

@@ -4,11 +4,6 @@
     <link rel="stylesheet" type="text/css" href={% static "css/create-worklist.css" %}>
     <script src="{% static 'js/create-worklist.js' %}"></script>
     <script src="{% static 'js/csrf-token-functions.js' %}"></script>
-    <script type="text/javascript">
-    	$(document).ready(function(){
-    		$('#nav-create-worklist').addClass('active');
-    	});
-    </script>
 {% endblock %}
 
 {% block content %}
@@ -26,12 +21,24 @@
 					</div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-md-4">
+				</div>
+				<div class="col-md-4">
+					<a role="button" class="btn btn-outline-primary" href="/worklist-tool/show-worklist">
+                        See all the worklists
+                    </a>
+				</div>
+			</div>
 		{% else %}
 			<div class="row">
 				<div class="col-md-2">
 				</div>
 				<div class="col-md-8 create-worklist-container">
 					<h2 class="top-heading">Create Worklist</h2>
+					<a role="button" class="btn btn-outline-primary" href="/worklist-tool/show-worklist">
+                        See all the worklists
+                    </a>
 					<form onsubmit="return saveWorklist()">
 					  Name of Worklist: <input class="worklist-name" id="worklist_name" type="text" name="name"
                                                placeholder="Enter name of the new worklist you want to create...">

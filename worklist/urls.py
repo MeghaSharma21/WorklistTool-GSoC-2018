@@ -2,7 +2,6 @@ from django.conf.urls import url, include
 from worklist import views
 
 urlpatterns = [
-        url(r'^add-articles-to-worklistt$', views.add_articles_to_worklist, name='add_articles_to_worklist'),
         url(r'^create-worklist$', views.create_worklist, name='create_worklist'),
         url(r'^show-worklist$', views.search_worklist, name='show_worklist'),
         url(r'^update-worklist-table$', views.update_worklist_table, name='update_worklist_table'),

@@ -59,38 +59,3 @@ function worker() {
     refresh();
     setTimeout(worker, 50000);
 }
-
-function addArticle(worklist_name, worklist_created_by) {
-    $.ajax({
-        url: "/worklist-tool/add-articles-to-worklistt",
-        type: "post",
-        data: {
-            article_name: $('#article_name').val(),
-            article_description: $('#article_description').val(),
-            article_effort: $('#article_effort').val(),
-            worklist_created_by: worklist_created_by,
-            worklist_name: worklist_name
-        },
-        success: function (data) {
-            $("#add_articles_modal").modal("hide")
-            $("#alert-message-holder").html(
-                "<div class='alert alert-danger' role='alert'>" +
-                "<a href='#' class='close' data-dismiss='alert'>&times;</a> "
-                + data.message + "</div>"
-            );
-            if(data.error == 0) {
-                refresh();
-            }
-        },
-         error: function () {
-            $("#alert-message-holder").html(
-                "<div class='alert alert-danger' role='alert'><a href='#' class='close' " +
-                "data-dismiss='alert'>&times;</a> " +
-                "<strong>Oh snap!</strong>Something went wrong while" +
-                " saving updated information! Please report Megha " +
-                "at meghasharma4910@gmail.com</div>"
-            );
-    }});
-
-    return false;
-}
