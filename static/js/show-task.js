@@ -78,11 +78,11 @@ function addArticle(worklist_name, worklist_created_by) {
                 "<a href='#' class='close' data-dismiss='alert'>&times;</a> "
                 + data.message + "</div>"
             );
-            if(data.error == 0) {
+            if (data.error == 0) {
                 refresh();
             }
         },
-         error: function () {
+        error: function () {
             $("#alert-message-holder").html(
                 "<div class='alert alert-danger' role='alert'><a href='#' class='close' " +
                 "data-dismiss='alert'>&times;</a> " +
@@ -90,7 +90,8 @@ function addArticle(worklist_name, worklist_created_by) {
                 " saving updated information! Please report Megha " +
                 "at meghasharma4910@gmail.com</div>"
             );
-    }});
+        }
+    });
 
     return false;
 }
