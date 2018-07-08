@@ -1,18 +1,24 @@
 {% extends 'base.html' %}
 
 {% block scripts %}
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/awesomplete/1.1.2/awesomplete.css" />
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/awesomplete/1.1.2/awesomplete.js" async></script>
     <script src="{% static 'js/csrf-token-functions.js' %}"></script>
     <script src="{% static 'js/show-task.js' %}"></script>
     <script type="text/javascript">
-    $(document).ready(function(){
+    var awesomplete;
+
+     $(document).ready(function(){
         tasks = {{tasks|safe}};
         worklist_name = "{{worklist_name}}";
         worklist_created_by = "{{worklist_created_by}}";
-        setTimeout(function(){
-        window.location.reload(true);
-        }, 120000);
+        input = $("#search_task_autocomplete");
+	    awesomplete = new Awesomplete(input);
+        awesomplete.list = tasks.map(task => task.article_name);
+
+        setTimeout(worker, 50000);
     });
     </script>
 
@@ -40,7 +46,7 @@
 					</div>
 					<div id="search_by_task_name" class="col-md-6">
 						<form id="search_by_task_name_form" action="/worklist-tool/show-tasks" method="get">
-							<input type="text" name="search_term"
+							<input id="search_task_autocomplete" type="text" name="search_term"
                                    placeholder="Search task">
 							<input class="hidden" id="task_name" type="text"
                                    name="search_type" value="task_name">
@@ -93,3 +99,4 @@
 	</div>
 	{% endif %}
 {% endblock %}
+

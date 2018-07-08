@@ -33,7 +33,3 @@ function worker() {
     refresh();
     setTimeout(worker, 50000);
 }
-
-$(window).on('load', function(){
-    setTimeout(worker, 50000);
-});

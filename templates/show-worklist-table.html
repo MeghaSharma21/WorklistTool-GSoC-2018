@@ -2,10 +2,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Worklist-Table</title>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        worklists = {{results|safe}};
+        worklistNames = [];
+        usernames = [];
+        $.each(worklists, function(index, value){
+            worklistNames.push(value.name);
+            usernames.push(value.created_by);
+        });
+        awesompleteByWorklistName.list = worklistNames;
+        awesompleteByUsername.list = Array.from(new Set(usernames));
+    });
+    </script>
 </head>
+{#{% block scripts %}#}
+{#   #}
+{#{%  endblock %}#}
 
 <body>
     {% if results|length %}
