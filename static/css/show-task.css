@@ -1,0 +1,18 @@
+.article-name {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    width: 200px;
+}
+
+.article-description {
+    margin-bottom: 1rem;
+    width: 229px
+}
+
+.article-effort{
+    width: 277px;
+}
+
+.share-icon-size {
+    font-size: 21px;
+}

@@ -7,20 +7,11 @@
     <script type="text/javascript">
     $(document).ready(function(){
         worklists = {{results|safe}};
-        worklistNames = [];
-        usernames = [];
-        $.each(worklists, function(index, value){
-            worklistNames.push(value.name);
-            usernames.push(value.created_by);
-        });
-        awesompleteByWorklistName.list = worklistNames;
-        awesompleteByUsername.list = Array.from(new Set(usernames));
+        awesomplete_by_worklist_name.list = worklists.map(worklist => worklist.name);
+        awesomplete_by_username.list = Array.from(new Set(worklists.map(worklist => worklist.created_by)));
     });
     </script>
 </head>
-{#{% block scripts %}#}
-{#   #}
-{#{%  endblock %}#}
 
 <body>
     {% if results|length %}
