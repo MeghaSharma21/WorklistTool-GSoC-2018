@@ -4,6 +4,11 @@
     <link rel="stylesheet" type="text/css" href={% static "css/user-worklists.css" %}>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#nav-see-worklist').addClass('active');
+        });
+    </script>
 {%  endblock %}
 
 {% block content %}
