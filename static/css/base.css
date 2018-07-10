@@ -66,3 +66,9 @@ th,td {
 .info-message {
     margin-left: 10px;
 }
+
+.report-error {
+    padding-left: 3rem;
+    font-size: 14px;
+    margin-right: 9px;
+}

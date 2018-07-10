@@ -31,7 +31,7 @@
                 {% for worklist in results %}
                   <tr>
                     <td>
-                        <a href="/worklist-tool/show-tasks?worklist_name={{worklist.name}}&worklist_created_by={{worklist.created_by}}">{{worklist.name}}
+                        <a href="/worklist-tool/show-tasks/{{worklist.created_by}}/{{worklist.name}}">{{worklist.name}}
                         </a>
                     </td>
                     <td>{{worklist.tags}}</td>

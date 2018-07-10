@@ -35,13 +35,13 @@ def app_logout(request):
 
 def with_logged_in_user(view):
     @functools.wraps(view)
-    def inner_method(request):
+    def inner_method(request, *args, **kwargs):
         user_or_none = None
 
         if request.user.is_authenticated:
             user_or_none = request.user.username
 
-        return view(request, user_or_none)
+        return view(request, user_or_none, *args, **kwargs)
 
     return inner_method
 
@@ -176,10 +176,8 @@ def update_worklist_table(request):
 
 # View to search a task by it's name
 @with_logged_in_user
-def search_task(request, username):
+def search_task(request, username, worklist_created_by, worklist_name):
     search_term = request.GET.get('search_term', '')
-    worklist_name = request.GET.get('worklist_name', '')
-    worklist_created_by = request.GET.get('worklist_created_by', '')
 
     tasks = search_task_helper(search_term, worklist_name, worklist_created_by)
 
@@ -190,21 +188,17 @@ def search_task(request, username):
 
 
 # View to update the table displaying all tasks of a worklist
-def update_task_table(request):
+def update_task_table(request, worklist_created_by, worklist_name):
     search_term = request.GET.get('search_term', '')
-    worklist_name = request.GET.get('worklist_name', '')
-    worklist_created_by = request.GET.get('worklist_created_by', '')
-
     tasks = search_task_helper(search_term, worklist_name, worklist_created_by)
+
     return render(request, 'show-task-table.html', {'tasks': tasks})
 
 
 # Update task information when user edits it
 @login_required
-def update_task_info(request):
+def update_task_info(request, worklist_created_by, worklist_name):
     username = request.user.username
-    worklist_name = request.POST.get('worklist_name', '')
-    worklist_created_by = request.POST.get('worklist_created_by', '')
     article_name = request.POST.get('article_name', '')
     status = request.POST.get('status', '')
     progress = request.POST.get('progress', '')
@@ -241,3 +235,4 @@ def show_user_worklists(request):
     return render(request, 'user-worklists.html', {'logged_in_user': username,
                                                    'created_worklists': list(created_worklists),
                                                    'worked_upon_worklists': list(worked_upon_worklists)})
+
