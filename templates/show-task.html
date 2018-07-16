@@ -17,8 +17,8 @@
         tasks = {{tasks|safe}};
         worklist_name = "{{worklist_name}}";
         worklist_created_by = "{{worklist_created_by}}";
-        input = $("#search_task_autocomplete");
-	    awesomplete = new Awesomplete(input);
+        input = document.getElementById("search_task_autocomplete");
+		awesomplete = new Awesomplete(input);
         awesomplete.list = tasks.map(task => task.article_name);
 
         setTimeout(worker, 50000);
