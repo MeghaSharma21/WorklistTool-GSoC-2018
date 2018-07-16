@@ -35,13 +35,13 @@ def app_logout(request):
 
 def with_logged_in_user(view):
     @functools.wraps(view)
-    def inner_method(request):
+    def inner_method(request, *args, **kwargs):
         user_or_none = None
 
         if request.user.is_authenticated:
             user_or_none = request.user.username
 
-        return view(request, user_or_none)
+        return view(request, user_or_none, *args, **kwargs)
 
     return inner_method
 
@@ -115,6 +115,45 @@ def create_worklist(request):
                                                     'logged_in_user': username})
 
 
+# View to add articles to a worklist
+@login_required
+def add_articles_to_worklist(request):
+    username = request.user.username
+    content = {'error': 0, 'message': ''}
+    if request.method == 'POST':
+        content = {'error': 0, 'message': 'Successfully added article to the worklist'}
+        article = [{'name': request.POST.get('article_name', None),
+                    'description': request.POST.get('article_description', ''),
+                    'effort': request.POST.get('article_effort', ''),
+                    'created_by': username
+                    }]
+
+        worklist_name = request.POST.get('worklist_name', None)
+        worklist_created_by = request.POST.get('worklist_created_by', None)
+
+        if article[0]['name'] is None:
+            content['error'] = 1
+            content['message'] = 'Article name can not be empty'
+
+        if Task.objects.filter(worklist__name=worklist_name,
+                               worklist__created_by=worklist_created_by,
+                               article__name=article[0]['name']).exists():
+            content['error'] = 1
+            content['message'] = 'Article with this name already exists in the worklist'
+
+        if content['error'] != 1:
+            worklist_object = WorkList.objects.get(name=worklist_name, created_by=worklist_created_by)
+
+            success = \
+                store_added_articles(worklist_object, article)
+            if success is False:
+                content['error'] = 1
+                content['message'] = 'Added article could not be saved.'
+
+    logger.info('Message:' + str(content['message']))
+    return JsonResponse({'error': content['error'], 'message': content['message']})
+
+
 # View to search a worklist by it's name or by user who created the worklist
 @with_logged_in_user
 def search_worklist(request, username):
@@ -137,10 +176,8 @@ def update_worklist_table(request):
 
 # View to search a task by it's name
 @with_logged_in_user
-def search_task(request, username):
+def search_task(request, username, worklist_created_by, worklist_name):
     search_term = request.GET.get('search_term', '')
-    worklist_name = request.GET.get('worklist_name', '')
-    worklist_created_by = request.GET.get('worklist_created_by', '')
 
     tasks = search_task_helper(search_term, worklist_name, worklist_created_by)
 
@@ -151,21 +188,17 @@ def search_task(request, username):
 
 
 # View to update the table displaying all tasks of a worklist
-def update_task_table(request):
+def update_task_table(request, worklist_created_by, worklist_name):
     search_term = request.GET.get('search_term', '')
-    worklist_name = request.GET.get('worklist_name', '')
-    worklist_created_by = request.GET.get('worklist_created_by', '')
-
     tasks = search_task_helper(search_term, worklist_name, worklist_created_by)
+
     return render(request, 'show-task-table.html', {'tasks': tasks})
 
 
 # Update task information when user edits it
 @login_required
-def update_task_info(request):
+def update_task_info(request, worklist_created_by, worklist_name):
     username = request.user.username
-    worklist_name = request.POST.get('worklist_name', '')
-    worklist_created_by = request.POST.get('worklist_created_by', '')
     article_name = request.POST.get('article_name', '')
     status = request.POST.get('status', '')
     progress = request.POST.get('progress', '')
@@ -199,5 +232,7 @@ def show_user_worklists(request):
     worked_upon_worklists = \
         map(worklist_to_dict, [r.worklist for r in Task.objects.filter(claimed_by=username)])
 
-    return render(request, 'user-worklists.html', {'created_worklists': list(created_worklists),
+    return render(request, 'user-worklists.html', {'logged_in_user': username,
+                                                   'created_worklists': list(created_worklists),
                                                    'worked_upon_worklists': list(worked_upon_worklists)})
+

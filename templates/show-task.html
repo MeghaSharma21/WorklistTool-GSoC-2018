@@ -7,10 +7,13 @@
     <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/awesomplete/1.1.2/awesomplete.js" async></script>
     <script src="{% static 'js/csrf-token-functions.js' %}"></script>
     <script src="{% static 'js/show-task.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href={% static "css/show-task.css" %}>
     <script type="text/javascript">
     var awesomplete;
 
      $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();
+
         tasks = {{tasks|safe}};
         worklist_name = "{{worklist_name}}";
         worklist_created_by = "{{worklist_created_by}}";
@@ -36,13 +39,16 @@
 
 {% block content %}
 	<div class="container">
+        <div id="alert-message-holder"></div>
 		<div class="row">
 			<div class="col-md-12 create-worklist-container">
-				<h2 class="top-heading">Worklist Name: {{worklist_name}}</h2>
+                <h2 class="top-heading">Worklist Name: {{worklist_name}}</h2>
+                <a href="#" data-toggle="popover" data-html="true" data-content="Share Worklist using this link: <a href='https://tools.wmflabs.org/worklist-tool/show-tasks/{{ worklist_created_by }}/{{ worklist_name }}'>https://tools.wmflabs.org/worklist-tool/show-tasks/{{ worklist_created_by }}/{{ worklist_name }}</a>"><i class="fa fa-share-alt share-icon-size"></i></a>
 				<div class="row">
 					<div class="col-md-6 no-left-padding">
-						<a role="button" class="btn btn-outline-primary"
-                           href="/worklist-tool/show-worklist">See all the worklists</a>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_articles_modal">
+                          Add articles <i class="fa fa-plus-circle"></i>
+                        </button>
 					</div>
 					<div id="search_by_task_name" class="col-md-6">
 						<form id="search_by_task_name_form" action="/worklist-tool/show-tasks" method="get">
@@ -98,5 +104,35 @@
 	  </div>
 	</div>
 	{% endif %}
-{% endblock %}
 
+    {% if logged_in_user %}
+	<div class="modal fade" id="add_articles_modal" tabindex="-1" role="dialog"
+         aria-labelledby="add_articles_modal_title" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="add_articles_modal_title"></h5>
+	        <button type="button" class="close" data-dismiss="modal"
+                    aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        <strong>Name of Article:</strong> <input id="article_name" type="text"
+                                                     value="" class="article-name"><br/>
+            <strong>Description:</strong> <input id="article_description" type="text"
+                                                 value="" class="article-description"><br/>
+            <strong>Effort:</strong> <input id="article_effort" type="number" min="0" max="100"
+                                                value="0" class="article-effort"><br/>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary"
+                    data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary"
+                    onclick="addArticle('{{ worklist_name }}', '{{ worklist_created_by }}')">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	{% endif %}
+{% endblock %}

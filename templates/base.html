@@ -32,8 +32,30 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
+                  {% if logged_in_user %}
+                      <li id="nav-create-worklist" class="nav-item">
+                        <a class="nav-link" href="{% url 'create_worklist' %}">Create Worklist</a>
+                      </li>
+                  {% endif %}
+                  <li id="nav-see-worklist" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      See Worklists
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="{% url 'show_worklist' %}">See all worklists</a>
+                      {% if logged_in_user %}
+                        <a class="dropdown-item" href="{% url 'show_user_worklists' %}">See my worklists</a>
+                      {% endif %}
+                    </div>
+                  </li>
             </ul>
             <ul class="nav navbar-nav right-nav">
+                <li class="nav-item report-error">
+                    <a class="nav-link" href="https://github.com/MeghaSharma21/WorklistTool-GSoC-2018/issues">
+                        <i class="fa fa-github"></i> Report an issue
+                    </a>
+                </li>
+
                 {% if logged_in_user %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -59,4 +81,3 @@
 
 </body>
 </html>
-
