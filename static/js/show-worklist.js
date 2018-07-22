@@ -15,35 +15,25 @@ function search_by_username() {
 }
 
 function rememberState() {
-	// Finding how many number of rows are being displayed so that we can make it same after refresh
-        var dropdownElements = $('.page-list .dropdown-menu .dropdown-item');
-        var activeDropdownElement = $('.page-list .dropdown-menu .dropdown-item.active')[0];
-        for(var i=0; i < dropdownElements.length; i++)
-        {
-            if (dropdownElements[i] === activeDropdownElement) {
-                activeDropdownElementIndex = i;
-            }
-        }
+        // Finding how many rows are being displayed so that we can make it same after refresh
+        var rowsPerPageDropdownIndex = $('.page-list .dropdown-menu .dropdown-item.active').index();
 
         // Finding which page is active so that we can make it active again after refresh
-        var paginationElements = $('.pagination .page-item .page-link');
-        var activeElement = $('.pagination .page-item.active .page-link')[0];
-        for(var i=0; i < paginationElements.length; i++)
-        {
-            if (paginationElements[i] === activeElement) {
-                activeElementIndex = i;
-            }
+        var rowsPerPageIndex = $('.pagination .page-item.active').index();
+
+        return {'rowsPerPageDropdownIndex': rowsPerPageDropdownIndex,
+                'rowsPerPageIndex': rowsPerPageIndex
         }
 }
 
-function restoreState() {
+function restoreState(rowsPerPageIndices) {
       // making the number of rows to be same
       var dropdownElements = $('.page-list .dropdown-menu .dropdown-item');
-      dropdownElements[activeDropdownElementIndex].click();
+      dropdownElements[rowsPerPageIndices.rowsPerPageDropdownIndex].click();
 
       // making the same page active as was before
       var paginationElements = $('.pagination .page-item .page-link');
-      paginationElements[activeElementIndex].click();
+      paginationElements[rowsPerPageIndices.rowsPerPageIndex].click();
 }
 
 function refresh() {
@@ -55,7 +45,7 @@ function refresh() {
         search_type = $("#search_by_username_form input[name=search_type]").val();
     }
 
-    rememberState();
+    var rowsPerPageIndices = rememberState();
 
     $('#worklist_table').html('');
     $('#worklist_table').addClass('loader');
@@ -66,8 +56,7 @@ function refresh() {
     }
     );
 
-    setTimeout(restoreState, 2000);
-
+    setTimeout(restoreState, 2000, rowsPerPageIndices);
 }
 
 function worker() {

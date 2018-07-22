@@ -2,8 +2,6 @@ var tasks;
 var worklist_name;
 var worklist_created_by;
 var input;
-var activeDropdownElementIndex;
-var activeElementIndex;
 
 function populateModal(task) {
     $('#exampleModalLongTitle').html(task.article_name);
@@ -42,35 +40,25 @@ function saveTask() {
 }
 
 function rememberState() {
-	// Finding how many number of rows are being displayed so that we can make it same after refresh
-        var dropdownElements = $('.page-list .dropdown-menu .dropdown-item');
-        var activeDropdownElement = $('.page-list .dropdown-menu .dropdown-item.active')[0];
-        for(var i=0; i < dropdownElements.length; i++)
-        {
-            if (dropdownElements[i] === activeDropdownElement) {
-                activeDropdownElementIndex = i;
-            }
-        }
+        // Finding how many rows are being displayed so that we can make it same after refresh
+        var rowsPerPageDropdownIndex = $('.page-list .dropdown-menu .dropdown-item.active').index();
 
         // Finding which page is active so that we can make it active again after refresh
-        var paginationElements = $('.pagination .page-item .page-link');
-        var activeElement = $('.pagination .page-item.active .page-link')[0];
-        for(var i=0; i < paginationElements.length; i++)
-        {
-            if (paginationElements[i] === activeElement) {
-                activeElementIndex = i;
-            }
+        var rowsPerPageIndex = $('.pagination .page-item.active').index();
+
+        return {'rowsPerPageDropdownIndex': rowsPerPageDropdownIndex,
+                'rowsPerPageIndex': rowsPerPageIndex
         }
 }
 
-function restoreState() {
+function restoreState(rowsPerPageIndices) {
       // making the number of rows to be same
       var dropdownElements = $('.page-list .dropdown-menu .dropdown-item');
-      dropdownElements[activeDropdownElementIndex].click();
+      dropdownElements[rowsPerPageIndices.rowsPerPageDropdownIndex].click();
 
       // making the same page active as was before
       var paginationElements = $('.pagination .page-item .page-link');
-      paginationElements[activeElementIndex].click();
+      paginationElements[rowsPerPageIndices.rowsPerPageIndex].click();
 }
 
 
@@ -79,7 +67,7 @@ function refresh() {
     worklist_name = $("#search_by_task_name_form input[name=worklist_name]").val();
     worklist_created_by = $("#search_by_task_name_form input[name=worklist_created_by]").val();
 
-    rememberState();
+    var rowsPerPageIndices = rememberState();
 
     $('#task_table').html('');
     $('#task_table').addClass('loader');
@@ -90,7 +78,7 @@ function refresh() {
 	    }
     );
 
-    setTimeout(restoreState, 2000);
+    setTimeout(restoreState, 2000, rowsPerPageIndices);
 }
 
 function worker() {
@@ -126,7 +114,7 @@ function addArticle(worklist_name, worklist_created_by) {
                 "data-dismiss='alert'>&times;</a> " +
                 "<strong>Oh snap!</strong>Something went wrong while" +
                 " saving updated information! Please report at " +
-                "https://github.com/MeghaSharma21/WorklistTool-GSoC-2018/issues"</div>"
+                "https://github.com/MeghaSharma21/WorklistTool-GSoC-2018/issues</div>"
             );
     }});
 
