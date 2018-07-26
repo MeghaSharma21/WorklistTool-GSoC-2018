@@ -1,14 +1,3 @@
-.overlay {
-    background: #e9e9e9;
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    opacity: 0.7;
-}
-
 .navbar-brand {
    width: 8rem;
 }
@@ -27,16 +16,6 @@ table {
 
 th,td {
     word-wrap: break-word;
-}
-
-/* loader */
-.loader {
-    width: 100%;
-    height: 13rem !important;
-    z-index: 9999;
-    background: url('/worklist-tool/static/images/loading.gif') 50% 50% no-repeat;
-    background-size: auto auto;
-    background-size: 3rem;
 }
 
 .hidden {
