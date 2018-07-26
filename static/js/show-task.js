@@ -71,16 +71,8 @@ function refresh() {
     rowsPerPageIndices = rememberState();
 
     $('#task_table').load(
-    "/worklist-tool/update-task-table/" + encodeURIComponent(worklist_created_by) + "/" + encodeURIComponent(worklist_name) + "?search_term=" + encodeURIComponent(search_term),
-        function() {
-          $('#task_table').addClass('loader');
-          $(".overlay").show();
-          setTimeout(function(){
-                $('#task_table').removeClass('loader');
-                $(".overlay").hide();
-            },1000);
-        }
-    );
+        "/worklist-tool/update-task-table/" + encodeURIComponent(worklist_created_by) + "/" + encodeURIComponent(worklist_name) + "?search_term=" + encodeURIComponent(search_term)
+    ).hide().fadeIn('slow');
 }
 
 function worker() {
