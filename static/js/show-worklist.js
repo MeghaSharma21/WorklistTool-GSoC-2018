@@ -1,6 +1,7 @@
 var worklists = [];
 var awesomplete_by_worklist_name;
 var awesomplete_by_username;
+var rowsPerPageIndices;
 
 function search_by_worklist_name() {
     $('#search_by_worklist_name').removeClass('hidden');
@@ -26,7 +27,7 @@ function rememberState() {
         }
 }
 
-function restoreState(rowsPerPageIndices) {
+function restoreState() {
       // making the number of rows to be same
       var dropdownElements = $('.page-list .dropdown-menu .dropdown-item');
       dropdownElements[rowsPerPageIndices.rowsPerPageDropdownIndex].click();
@@ -45,21 +46,23 @@ function refresh() {
         search_type = $("#search_by_username_form input[name=search_type]").val();
     }
 
-    var rowsPerPageIndices = rememberState();
+    rowsPerPageIndices = rememberState();
 
-    $('#worklist_table').html('');
-    $('#worklist_table').addClass('loader');
-    $('#worklist_table').html('').load("/worklist-tool/update-worklist-table?search_term=" +
+    $('#worklist_table').load("/worklist-tool/update-worklist-table?search_term=" +
         encodeURIComponent(search_term) + "&search_type=" + encodeURIComponent(search_type),
-    function() {
-      $('#worklist_table').removeClass('loader');
-    }
+        function() {
+              $('#worklist_table').addClass('loader');
+              $(".overlay").show();
+              setTimeout(function(){
+                    $('#worklist_table').removeClass('loader');
+                    $(".overlay").hide();
+              },1000);
+        }
     );
-
-    setTimeout(restoreState, 2000, rowsPerPageIndices);
 }
 
 function worker() {
     refresh();
     setTimeout(worker, 50000);
 }
+

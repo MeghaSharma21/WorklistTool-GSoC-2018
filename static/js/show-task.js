@@ -2,6 +2,7 @@ var tasks;
 var worklist_name;
 var worklist_created_by;
 var input;
+var rowsPerPageIndices;
 
 function populateModal(task) {
     $('#exampleModalLongTitle').html(task.article_name);
@@ -44,14 +45,14 @@ function rememberState() {
         var rowsPerPageDropdownIndex = $('.page-list .dropdown-menu .dropdown-item.active').index();
 
         // Finding which page is active so that we can make it active again after refresh
-        var rowsPerPageIndex = $('.pagination .page-item.active').index();
+        rowsPerPageIndex = $('.pagination .page-item.active').index();
 
         return {'rowsPerPageDropdownIndex': rowsPerPageDropdownIndex,
                 'rowsPerPageIndex': rowsPerPageIndex
         }
 }
 
-function restoreState(rowsPerPageIndices) {
+function restoreState() {
       // making the number of rows to be same
       var dropdownElements = $('.page-list .dropdown-menu .dropdown-item');
       dropdownElements[rowsPerPageIndices.rowsPerPageDropdownIndex].click();
@@ -67,18 +68,19 @@ function refresh() {
     worklist_name = $("#search_by_task_name_form input[name=worklist_name]").val();
     worklist_created_by = $("#search_by_task_name_form input[name=worklist_created_by]").val();
 
-    var rowsPerPageIndices = rememberState();
+    rowsPerPageIndices = rememberState();
 
-    $('#task_table').html('');
-    $('#task_table').addClass('loader');
-    $('#task_table').html('').load(
+    $('#task_table').load(
     "/worklist-tool/update-task-table/" + encodeURIComponent(worklist_created_by) + "/" + encodeURIComponent(worklist_name) + "?search_term=" + encodeURIComponent(search_term),
-	    function() {
-	      $('#task_table').removeClass('loader');
-	    }
+        function() {
+          $('#task_table').addClass('loader');
+          $(".overlay").show();
+          setTimeout(function(){
+                $('#task_table').removeClass('loader');
+                $(".overlay").hide();
+            },1000);
+        }
     );
-
-    setTimeout(restoreState, 2000, rowsPerPageIndices);
 }
 
 function worker() {
@@ -120,3 +122,4 @@ function addArticle(worklist_name, worklist_created_by) {
 
     return false;
 }
+
