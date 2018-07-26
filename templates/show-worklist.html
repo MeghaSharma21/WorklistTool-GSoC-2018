@@ -5,6 +5,7 @@
     <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
     <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/awesomplete/1.1.2/awesomplete.css" />
     <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/awesomplete/1.1.2/awesomplete.js" async></script>
+    <script src="{% static 'js/arrive.js' %}"></script>
     <script src="{% static 'js/show-worklist.js' %}"></script>
     <script type="text/javascript">
     var worklists = [];
@@ -15,6 +16,7 @@
 
     $(document).ready(function(){
 
+    	// making the nav active
     	$('#nav-see-worklist').addClass('active');
 
         worklists = {{results|safe}};
@@ -26,6 +28,10 @@
 	    input_by_username.list = Array.from(new Set(worklists.map(worklist => worklist.created_by)));
 
 	    setTimeout(worker, 50000);
+
+        $(document).arrive(".fixed-table-pagination", function() {
+    		restoreState();
+		});
     });
     </script>
     <style type="text/css">
@@ -40,6 +46,8 @@
 {%  endblock %}
 
 {% block content %}
+	<div class="overlay">
+	</div>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 create-worklist-container">
@@ -83,3 +91,4 @@
 		</div>
 	</div>
 {%  endblock %}
+
