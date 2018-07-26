@@ -5,8 +5,8 @@
     <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
     <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/awesomplete/1.1.2/awesomplete.css" />
     <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/awesomplete/1.1.2/awesomplete.js" async></script>
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/arrive/2.4.1/arrive.js"></script>
     <script src="{% static 'js/csrf-token-functions.js' %}"></script>
-    <script src="{% static 'js/arrive.js' %}"></script>
     <script src="{% static 'js/show-task.js' %}"></script>
     <link rel="stylesheet" type="text/css" href={% static "css/show-task.css" %}>
     <script type="text/javascript">
@@ -43,8 +43,6 @@
 {%  endblock %}
 
 {% block content %}
-	<div class="overlay">
-	</div>
 	<div class="container">
         <div id="alert-message-holder"></div>
 		<div class="row">
