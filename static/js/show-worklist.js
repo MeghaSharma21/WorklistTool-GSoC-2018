@@ -49,8 +49,11 @@ function refresh() {
     rowsPerPageIndices = rememberState();
 
     $('#worklist_table').load("/worklist-tool/update-worklist-table?search_term=" +
-        encodeURIComponent(search_term) + "&search_type=" + encodeURIComponent(search_type)
-    ).hide().fadeIn('slow');
+        encodeURIComponent(search_term) + "&search_type=" + encodeURIComponent(search_type), function(){
+            $('#task_table').hide();
+            setTimeout(function(){$('#worklist_table').fadeIn('slow');},0);
+        }
+    );
 }
 
 function worker() {
