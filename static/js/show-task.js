@@ -2,6 +2,7 @@ var tasks;
 var worklist_name;
 var worklist_created_by;
 var input;
+var rowsPerPageIndices;
 
 function populateModal(task) {
     $('#exampleModalLongTitle').html(task.article_name);
@@ -16,7 +17,7 @@ function taskForm(taskIndex){
 }
 
 function saveTask() {
-    $.ajax({url: "/worklist-tool/update-task-info",
+    $.ajax({url: "/worklist-tool/update-task-info/",
         type: "post",
         data: {
             'worklist_name': worklist_name,
@@ -39,20 +40,41 @@ function saveTask() {
     }});
 }
 
+function rememberState() {
+        // Finding how many rows are being displayed so that we can make it same after refresh
+        var rowsPerPageDropdownIndex = $('.page-list .dropdown-menu .dropdown-item.active').index();
+
+        // Finding which page is active so that we can make it active again after refresh
+        rowsPerPageIndex = $('.pagination .page-item.active').index();
+
+        return {'rowsPerPageDropdownIndex': rowsPerPageDropdownIndex,
+                'rowsPerPageIndex': rowsPerPageIndex
+        }
+}
+
+function restoreState() {
+      // making the number of rows to be same
+      var dropdownElements = $('.page-list .dropdown-menu .dropdown-item');
+      dropdownElements[rowsPerPageIndices.rowsPerPageDropdownIndex].click();
+
+      // making the same page active as was before
+      var paginationElements = $('.pagination .page-item .page-link');
+      paginationElements[rowsPerPageIndices.rowsPerPageIndex].click();
+}
+
+
 function refresh() {
     search_term = $("#search_by_task_name_form input[name=search_term]").val();
     worklist_name = $("#search_by_task_name_form input[name=worklist_name]").val();
     worklist_created_by = $("#search_by_task_name_form input[name=worklist_created_by]").val();
 
-    $('#task_table').html('');
-    $('#task_table').addClass('loader');
-    $('#task_table').html('').load(
-    "/worklist-tool/update-task-table?search_term=" + encodeURIComponent(search_term) + "&worklist_name=" +
-        encodeURIComponent(worklist_name) + "&worklist_created_by=" + encodeURIComponent(worklist_created_by),
-    function() {
-      $('#task_table').removeClass('loader');
-    }
-    );
+    rowsPerPageIndices = rememberState();
+
+    $('#task_table').load(
+        "/worklist-tool/update-task-table/" + encodeURIComponent(worklist_created_by) + "/" + encodeURIComponent(worklist_name) + "?search_term=" + encodeURIComponent(search_term), function(){
+            $('#task_table').hide();
+            setTimeout(function(){$('#task_table').fadeIn('slow');},0);
+        });
 }
 
 function worker() {
@@ -87,10 +109,11 @@ function addArticle(worklist_name, worklist_created_by) {
                 "<div class='alert alert-danger' role='alert'><a href='#' class='close' " +
                 "data-dismiss='alert'>&times;</a> " +
                 "<strong>Oh snap!</strong>Something went wrong while" +
-                " saving updated information! Please report at https://github.com/MeghaSharma21/WorklistTool-GSoC-2018/issues"</div>"
+                " saving updated information! Please report at " +
+                "https://github.com/MeghaSharma21/WorklistTool-GSoC-2018/issues</div>"
             );
-        }
-    });
+    }});
 
     return false;
 }
+

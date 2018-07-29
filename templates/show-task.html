@@ -5,6 +5,7 @@
     <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
     <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/awesomplete/1.1.2/awesomplete.css" />
     <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/awesomplete/1.1.2/awesomplete.js" async></script>
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/arrive/2.4.1/arrive.js"></script>
     <script src="{% static 'js/csrf-token-functions.js' %}"></script>
     <script src="{% static 'js/show-task.js' %}"></script>
     <link rel="stylesheet" type="text/css" href={% static "css/show-task.css" %}>
@@ -17,11 +18,15 @@
         tasks = {{tasks|safe}};
         worklist_name = "{{worklist_name}}";
         worklist_created_by = "{{worklist_created_by}}";
-        input = $("#search_task_autocomplete");
-	    awesomplete = new Awesomplete(input);
+        input = document.getElementById("search_task_autocomplete");
+		awesomplete = new Awesomplete(input);
         awesomplete.list = tasks.map(task => task.article_name);
 
         setTimeout(worker, 50000);
+
+        $(document).arrive(".fixed-table-pagination", function() {
+    		restoreState();
+		});
     });
     </script>
 
@@ -44,11 +49,14 @@
 			<div class="col-md-12 create-worklist-container">
                 <h2 class="top-heading">Worklist Name: {{worklist_name}}</h2>
                 <a href="#" data-toggle="popover" data-html="true" data-content="Share Worklist using this link: <a href='https://tools.wmflabs.org/worklist-tool/show-tasks/{{ worklist_created_by }}/{{ worklist_name }}'>https://tools.wmflabs.org/worklist-tool/show-tasks/{{ worklist_created_by }}/{{ worklist_name }}</a>"><i class="fa fa-share-alt share-icon-size"></i></a>
+
 				<div class="row">
 					<div class="col-md-6 no-left-padding">
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_articles_modal">
-                          Add articles <i class="fa fa-plus-circle"></i>
-                        </button>
+						{% if logged_in_user %}
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_articles_modal">
+	                          Add articles <i class="fa fa-plus-circle"></i>
+	                        </button>
+                        {% endif %}
 					</div>
 					<div id="search_by_task_name" class="col-md-6">
 						<form id="search_by_task_name_form" action="/worklist-tool/show-tasks" method="get">
@@ -136,3 +144,4 @@
 	</div>
 	{% endif %}
 {% endblock %}
+
