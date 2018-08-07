@@ -179,20 +179,21 @@ def update_worklist_table(request):
 def search_task(request, username, worklist_created_by, worklist_name):
     search_term = request.GET.get('search_term', '')
 
-    tasks = search_task_helper(search_term, worklist_name, worklist_created_by)
+    results = search_task_helper(search_term, worklist_name, worklist_created_by)
 
-    return render(request, 'show-task.html', {'tasks': tasks,
+    return render(request, 'show-task.html', {'tasks': results['tasks'],
                                               'worklist_name': worklist_name,
                                               'worklist_created_by': worklist_created_by,
+                                              'worklist_description': results['worklist_description'],
                                               'logged_in_user': username})
 
 
 # View to update the table displaying all tasks of a worklist
 def update_task_table(request, worklist_created_by, worklist_name):
     search_term = request.GET.get('search_term', '')
-    tasks = search_task_helper(search_term, worklist_name, worklist_created_by)
+    results = search_task_helper(search_term, worklist_name, worklist_created_by)
 
-    return render(request, 'show-task-table.html', {'tasks': tasks})
+    return render(request, 'show-task-table.html', {'tasks': results['tasks']})
 
 
 # Update task information when user edits it

@@ -38,6 +38,17 @@ def search_worklist_helper(search_term, search_type):
 def search_task_helper(search_term, worklist_name, worklist_created_by):
     tasks = []
 
+    try:
+        worklist_object = WorkList.objects.get(name=worklist_name,
+                                               created_by=worklist_created_by)
+        worklist_description = worklist_object.description
+    except WorkList.DoesNotExist:
+        raise RuntimeWarning('Worklist with given inputs does not exist')
+
+    if worklist_description == '':
+        worklist_description = 'Description for this worklist does not exist. ' \
+                               'Please contact the curator of the worklist.'
+
     if search_term == '':
         # Output all tasks of that worklist in case search term is empty
         results = Task.objects.filter(worklist__name=worklist_name,
@@ -61,5 +72,4 @@ def search_task_helper(search_term, worklist_name, worklist_created_by):
 
         tasks.append(task)
 
-    return tasks
-
+    return {'tasks': tasks, 'worklist_description': worklist_description}

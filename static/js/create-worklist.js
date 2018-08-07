@@ -51,8 +51,9 @@ function saveWorklist() {
                 + data.message + "</div>"
             );
             if(data.error == 0) {
-                window.location.href = '/worklist-tool/show-tasks?worklist_name='
-                + data.name + '&worklist_created_by=' + data.created_by
+                window.location.href = '/worklist-tool/show-tasks?'
+                    + encodeURIComponent(worklist_created_by) + '/'
+                    + encodeURIComponent(worklist_name)
             }
         },
         error: function () {
