@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load replace %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,7 +33,7 @@
                 <tbody>
                 {% for task in tasks %}
                   <tr>
-                    <td><a href="https://en.wikipedia.org/wiki/{{ task.article_name|urlencode }}">{{ task.article_name }}</a>
+                    <td><a href="https://en.wikipedia.org/wiki/{{ task.article_name|replace:" " }}">{{ task.article_name }}</a>
                          {% if logged_in_user and task.status == "open" or logged_in_user and task.status == "claimed" and task.claimed_by == logged_in_user %} <i class="fa fa-pencil-square-o" onclick="taskForm({{forloop.counter0}})"></i> {% endif %}
                     </td>
                     <td>{{ task.description }}</td>
