@@ -179,32 +179,37 @@ def update_worklist_table(request):
 def search_task(request, username, worklist_created_by, worklist_name):
     search_term = request.GET.get('search_term', '')
 
-    tasks = search_task_helper(search_term, worklist_name, worklist_created_by)
+    results = search_task_helper(search_term, worklist_name, worklist_created_by)
 
-    return render(request, 'show-task.html', {'tasks': tasks,
+    return render(request, 'show-task.html', {'tasks': results['tasks'],
                                               'worklist_name': worklist_name,
                                               'worklist_created_by': worklist_created_by,
+                                              'worklist_description': results['worklist_description'],
                                               'logged_in_user': username})
 
 
 # View to update the table displaying all tasks of a worklist
-def update_task_table(request, worklist_created_by, worklist_name):
+@with_logged_in_user
+def update_task_table(request, username, worklist_created_by, worklist_name):
     search_term = request.GET.get('search_term', '')
-    tasks = search_task_helper(search_term, worklist_name, worklist_created_by)
+    results = search_task_helper(search_term, worklist_name, worklist_created_by)
 
-    return render(request, 'show-task-table.html', {'tasks': tasks})
+    return render(request, 'show-task-table.html', {'tasks': results['tasks'],
+                                                    'logged_in_user': username})
 
 
 # Update task information when user edits it
 @login_required
-def update_task_info(request, worklist_created_by, worklist_name):
+def update_task_info(request):
     username = request.user.username
+    worklist_created_by = request.POST.get('worklist_created_by', '')
+    worklist_name = request.POST.get('worklist_name', '')
     article_name = request.POST.get('article_name', '')
     status = request.POST.get('status', '')
     progress = request.POST.get('progress', '')
     claimed_by = ''
 
-    if status == 'claimed':
+    if status == 'Claimed':
         claimed_by = username
     status_code = ARTICLE_STATUS_TO_NUMBER_MAPPING[status]
 
@@ -235,4 +240,3 @@ def show_user_worklists(request):
     return render(request, 'user-worklists.html', {'logged_in_user': username,
                                                    'created_worklists': list(created_worklists),
                                                    'worked_upon_worklists': list(worked_upon_worklists)})
-

@@ -49,7 +49,7 @@
 			<div class="col-md-12 create-worklist-container">
                 <h2 class="top-heading">Worklist Name: {{worklist_name}}</h2>
                 <a href="#" data-toggle="popover" data-html="true" data-content="Share Worklist using this link: <a href='https://tools.wmflabs.org/worklist-tool/show-tasks/{{ worklist_created_by }}/{{ worklist_name }}'>https://tools.wmflabs.org/worklist-tool/show-tasks/{{ worklist_created_by }}/{{ worklist_name }}</a>"><i class="fa fa-share-alt share-icon-size"></i></a>
-
+                <p><strong>Description: </strong>{{ worklist_description }}</p>
 				<div class="row">
 					<div class="col-md-6 no-left-padding">
 						{% if logged_in_user %}
@@ -79,40 +79,6 @@
 		</div>
 	</div>
 
-	<!-- Modal -->
-	{% if logged_in_user %}
-	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="exampleModalLongTitle"></h5>
-	        <button type="button" class="close" data-dismiss="modal"
-                    aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-	        <strong>Progress:</strong> <input id="task_progress" type="number"
-                                              min="0" max="100" value="0"><br/>
-	        <strong>Status:</strong> <div>
-	        	<input type="radio" name="status" value="open" checked>Open
-	        	<input type="radio" name="status" value="closed">Closed
-	        	<input type="radio" name="status" value="claimed">Claimed
-	        </div>
-
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary"
-                    data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary"
-                    onclick="saveTask()">Save changes</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	{% endif %}
-
     {% if logged_in_user %}
 	<div class="modal fade" id="add_articles_modal" tabindex="-1" role="dialog"
          aria-labelledby="add_articles_modal_title" aria-hidden="true">
@@ -130,8 +96,12 @@
                                                      value="" class="article-name"><br/>
             <strong>Description:</strong> <input id="article_description" type="text"
                                                  value="" class="article-description"><br/>
-            <strong>Effort:</strong> <input id="article_effort" type="number" min="0" max="100"
-                                                value="0" class="article-effort"><br/>
+            <strong>Effort:</strong>
+              <select id="article_effort">
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+              </select><br/>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary"
@@ -144,4 +114,3 @@
 	</div>
 	{% endif %}
 {% endblock %}
-
