@@ -14,8 +14,7 @@ function saveTask(article_name, task_id, logged_in_user) {
             'worklist_created_by': worklist_created_by,
             'article_name': article_name,
             'status': $(status_id).val(),
-            'progress': $(progress_id).val(),
-            'claimed_by': logged_in_user
+            'progress': $(progress_id).val()
         },
         success: function (data) {
             window.location.reload(true);
