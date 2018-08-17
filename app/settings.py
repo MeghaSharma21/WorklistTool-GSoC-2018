@@ -55,7 +55,10 @@ TEMPLATES = [
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
             ],
-            'builtins': ['django.contrib.staticfiles.templatetags.staticfiles']
+            'builtins': ['django.contrib.staticfiles.templatetags.staticfiles'],
+            'libraries':{
+                'replace': 'worklist.template_tags.replace_space_filter'
+            }
         },
     },
 ]
