@@ -4,7 +4,7 @@ The Worklist Tool is a tool for creating lists of Wikimedia pages which users ca
 The tool was first developed with Wikimedia during Google Summer of Code 2018.
 
 ## Usage
-The Worklist Tool is currently hosting on Toolforge at https://tools.wmflabs.org/worklist-tool/.
+The Worklist Tool is hosted on Toolforge at https://tools.wmflabs.org/worklist-tool/.
 
 To create a new worklist:
 
