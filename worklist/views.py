@@ -3,13 +3,15 @@ import json
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 import logging
-from worklist.constants import ARTICLE_STATUS_TO_NUMBER_MAPPING
+from worklist.constants import ARTICLE_STATUS_TO_NUMBER_MAPPING, CLAIMED_STATUS, OPEN_STATUS
 from worklist.views_helper_functions.search_helpers import search_worklist_helper, search_task_helper
 from worklist.views_helper_functions.store_articles import \
     store_added_articles, store_psid_articles
 from worklist.models import WorkList, Task
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+
+from worklist.utility_functions import can_modify_task_status, can_modify_task_progress
 
 logger = logging.getLogger('django')
 
@@ -194,6 +196,11 @@ def update_task_table(request, username, worklist_created_by, worklist_name):
     search_term = request.GET.get('search_term', '')
     results = search_task_helper(search_term, worklist_name, worklist_created_by)
 
+    for task in results['tasks']:
+        task['can_modify_status'] = can_modify_task_status(task['status'], task['claimed_by'],
+                                                           username)
+        task['can_modify_progress'] = can_modify_task_progress(task['status'], task['claimed_by'], username)
+
     return render(request, 'show-task-table.html', {'tasks': results['tasks'],
                                                     'logged_in_user': username})
 
@@ -209,7 +216,7 @@ def update_task_info(request):
     progress = request.POST.get('progress', '')
     claimed_by = ''
 
-    if status == 'Claimed':
+    if status == CLAIMED_STATUS:
         claimed_by = username
     status_code = ARTICLE_STATUS_TO_NUMBER_MAPPING[status]
 

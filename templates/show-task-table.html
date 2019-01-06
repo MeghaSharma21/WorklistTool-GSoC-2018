@@ -37,8 +37,8 @@
                     <td>{{ task.description }}</td>
                     <td>{{ task.created_by }}</td>
                     <td>
-                        {% if logged_in_user and task.status == "Open" or logged_in_user and task.status == "Claimed" and task.claimed_by == logged_in_user %}
-                            <select id="select-status-{{ task.task_id }}" onchange='saveTask("{{ task.article_name }}", "{{ task.task_id }}", "{{ logged_in_user }}");'>
+                        {% if task.can_modify_status  %}
+                            <select id="select-status-{{ task.task_id }}" onchange='saveTask("{{ task.article_name }}", "{{ task.task_id }}");'>
                                 <option value="Open" {% if task.status == 'Open' %}selected="selected"{% endif %}>Open</option>
                                 <option value="Claimed" {% if task.status == 'Claimed' %}selected="selected"{% endif %}>Claimed</option>
                                 <option value="Closed" {% if task.status == 'Closed' %}selected="selected"{% endif %}>Closed</option>
@@ -48,7 +48,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        {% if logged_in_user and task.status == "Claimed" and task.claimed_by == logged_in_user %}
+                        {% if task.can_modify_progress %}
                             <select id="select-progress-{{ task.article_name }}"  onchange='saveTask("{{ task.article_name }}", "{{ task.task_id }}", "{{ logged_in_user }}");'>
                                 <option value="Not Started" {% if task.progress == 'Not Started' %}selected="selected"{% endif %}>Not Started</option>
                                 <option value="Just Started" {% if task.progress == 'Just Started' %}selected="selected"{% endif %}>Just Started</option>

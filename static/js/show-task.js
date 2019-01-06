@@ -4,7 +4,7 @@ var worklist_created_by;
 var input;
 var pageState;
 
-function saveTask(article_name, task_id, logged_in_user) {
+function saveTask(article_name, task_id) {
     var status_id = "#select-status-" + task_id;
     var progress_id = "#select-progress-" + task_id;
     $.ajax({url: "/worklist-tool/update-task-info/",
@@ -14,7 +14,7 @@ function saveTask(article_name, task_id, logged_in_user) {
             'worklist_created_by': worklist_created_by,
             'article_name': article_name,
             'status': $(status_id).val(),
-            'progress': $(progress_id).val()
+            'progress': $(progress_id).val(),
         },
         success: function (data) {
             window.location.reload(true);
@@ -24,8 +24,8 @@ function saveTask(article_name, task_id, logged_in_user) {
                 "<div class='alert alert-danger' role='alert'><a href='#' class='close' " +
                 "data-dismiss='alert'>&times;</a> " +
                 "<strong>Oh snap!</strong>Something went wrong while" +
-                " saving updated information! Please report Megha " +
-                "at meghasharma4910@gmail.com</div>"
+                " saving updated information! Please report issues at " +
+                "https://github.com/MeghaSharma21/WorklistTool-GSoC-2018/issues</div>"
             );
     }});
 }

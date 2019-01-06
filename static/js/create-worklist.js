@@ -61,8 +61,8 @@ function saveWorklist() {
                 "<div class='alert alert-danger' role='alert'><a href='#' " +
                 "class='close' data-dismiss='alert'>&times;</a> " +
                 "<strong>Oh snap! </strong>Something went wrong while" +
-                " saving worklist. Please report Megha " +
-                "at meghasharma4910@gmail.com</div>"
+                " saving worklist. Please report issues at " +
+                "https://github.com/MeghaSharma21/WorklistTool-GSoC-2018/issues</div>"
             );
         },
         complete: function () {

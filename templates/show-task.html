@@ -57,6 +57,7 @@
 	                          Add articles <i class="fa fa-plus-circle"></i>
 	                        </button>
                         {% endif %}
+						<a href="#" data-toggle="popover" data-html="true" data-content="Share Worklist using this link: <a href='https://tools.wmflabs.org/worklist-tool/show-tasks/{{ worklist_created_by }}/{{ worklist_name }}'>https://tools.wmflabs.org/worklist-tool/show-tasks/{{ worklist_created_by }}/{{ worklist_name }}</a>"><i class="fa fa-share-alt share-icon-size"></i></a>
 					</div>
 					<div id="search_by_task_name" class="col-md-6">
 						<form id="search_by_task_name_form" action="/worklist-tool/show-tasks" method="get">
