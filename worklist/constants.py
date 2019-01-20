@@ -26,3 +26,6 @@ SEARCH_BY_USERNAME_FOR_WORKLISTS = 'username'
 
 # Default timeout for HTTP GET Request
 TIMEOUT_IN_SECONDS = 10
+
+# URL for Petscan
+PETSCAN_URL = "https://petscan.wmflabs.org"
