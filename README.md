@@ -28,24 +28,27 @@ The vision for this tool is that it will be able to integrate with other tools, 
 ## Setup
 If you want to contribute to Worklist tool follow the below given steps to set it up on your local machine.
 
-* Cloning repository - 
+#### Cloning repository - 
 ```
 $ git clone https://github.com/MeghaSharma21/WorklistTool-GSoC-2018.git
 $ cd WorklistTool-GSoC-2018
 ```
 
-* Setting up virtual env - [virtualenv](https://pypi.python.org/pypi/virtualenv) will help in keeping the dependencies required for this tool local to it's virtualenv only. It'll prevent version collisions of dependencies among projects. For installing virtualenv and python3 refer to [this](https://gist.github.com/pandafulmanda/730a9355e088a9970b18275cb9eadef3) setup guide.
+#### Setting up virtual env -
+[virtualenv](https://pypi.python.org/pypi/virtualenv) will help in keeping the dependencies required for this tool local to it's virtualenv only. It'll prevent version collisions of dependencies among projects. For installing virtualenv and python3 refer to [this](https://gist.github.com/pandafulmanda/730a9355e088a9970b18275cb9eadef3) setup guide.
 ```
 $ virtualenv venv
 $ source venv/bin/activate
 ```
 
-* Installing dependencies - Dependencies are managed via a `requirements.txt` file:
+#### Installing dependencies -
+Dependencies are managed via a `requirements.txt` file:
 ```
 $ pip install -r requirements.txt
 ```
 
-* Registering consumer for OAuth - Worklist tool uses Mediawiki OAuth to authenticate the users. For setting it up for your local workspace you need to register a consumer using a form available [here](https://www.mediawiki.org/wiki/OAuth/For_Developers#Registration). For details on how this is incorporated in a Django project please read through [this](https://wikitech.wikimedia.org/wiki/Help:Toolforge/My_first_Django_OAuth_tool#Local_development_and_testing).
+#### Registering consumer for OAuth -
+Worklist tool uses Mediawiki OAuth to authenticate the users. For setting it up for your local workspace you need to register a consumer using a form available [here](https://www.mediawiki.org/wiki/OAuth/For_Developers#Registration). For details on how this is incorporated in a Django project please read through [this](https://wikitech.wikimedia.org/wiki/Help:Toolforge/My_first_Django_OAuth_tool#Local_development_and_testing).
 
-<<NOT COMPLETE YET>>
+-- IN PROGRESS --
 
