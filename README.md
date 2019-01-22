@@ -50,5 +50,24 @@ $ pip install -r requirements.txt
 #### Registering consumer for OAuth -
 Worklist tool uses Mediawiki OAuth to authenticate the users. For setting it up for your local workspace you need to register a consumer using a form available [here](https://www.mediawiki.org/wiki/OAuth/For_Developers#Registration). For details on how this is incorporated in a Django project please read through [this](https://wikitech.wikimedia.org/wiki/Help:Toolforge/My_first_Django_OAuth_tool#Local_development_and_testing).
 
--- IN PROGRESS --
 
+#### Modifying wsgi.py
+Place the OAuth keys and callback URL in the placeholders based on the wiki mentioned above. Put in the secret key also.
+
+
+#### Using settings-development.py
+settings-development.py contains settings required while setting the project on local machine for development purposes.Rename settings-development.py to settings.py. 
+
+
+#### Database setup
+Sqlite is the default database engine for Django. But in worklist tool Mysql is used. Since Django is agnostic of the database you can set either of them.
+* Option 1: MySql - You can set it up using this [tutorial](https://www.digitalocean.com/community/tutorials/how-to-create-a-django-app-and-connect-it-to-a-database#step-3-%E2%80%94-install-mysql-database-connector). Modify the database.cnf by putting in your database name, username and password. Hostname will be localhost. Also, create a database in MySql of the same name as mentioned in database.cnf.
+* Option 2: Sqlite - For this you need to modify DATABASES section in settings.py in [this](https://gist.github.com/drivard/3417970) way.
+
+### Final Steps!
+You're almost done, yaya! Just run these commands -
+```
+$ python manage.py makemigrations
+$ python manage.py migrate
+$ python manage.py runserver 127.0.0.1:8000
+```
