@@ -198,8 +198,10 @@ def update_task_table(request, username, worklist_created_by, worklist_name):
 
     for task in results['tasks']:
         task['can_modify_status'] = can_modify_task_status(task['status'], task['claimed_by'],
-                                                           username)
-        task['can_modify_progress'] = can_modify_task_progress(task['status'], task['claimed_by'], username)
+                                                           worklist_created_by, username)
+
+        task['can_modify_progress'] = can_modify_task_progress(task['status'], task['claimed_by'],
+                                                               worklist_created_by, username)
 
     return render(request, 'show-task-table.html', {'tasks': results['tasks'],
                                                     'logged_in_user': username})
@@ -220,11 +222,28 @@ def update_task_info(request):
         claimed_by = username
     status_code = ARTICLE_STATUS_TO_NUMBER_MAPPING[status]
 
-    results = Task.objects.filter(worklist__name=worklist_name,
+    try:
+        result = Task.objects.get(worklist__name=worklist_name,
                                   worklist__created_by=worklist_created_by,
                                   article__name=article_name)
+    except Task.MultipleObjectsReturned or Task.DoesNotExist:
+        error_message = "Can't update task info as either the entry " \
+                        "doesn't exist or there are multiple entries."
+        logger.info(error_message)
+        raise RuntimeWarning(error_message)
 
-    results.update(progress=progress, status=status_code, claimed_by=claimed_by)
+    if can_modify_task_status(result.status, result.claimed_by, worklist_created_by, username):
+        result.status = status_code
+        result.claimed_by = claimed_by
+        result.save(update_fields=['status', 'claimed_by'])
+    else:
+        return JsonResponse({'success': False, 'message': 'Do not have permissions to edit the status'})
+
+    if can_modify_task_progress(result.status, result.claimed_by, worklist_created_by, username):
+        result.progress = progress
+        result.save(update_fields=['progress'])
+    else:
+        return JsonResponse({'success': False, 'message': 'Do not have permissions to edit the progress'})
 
     return JsonResponse({'success': True})
 

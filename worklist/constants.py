@@ -5,6 +5,10 @@ OPEN_STATUS = 'Open'
 # Constant assigned for claimed tasks
 CLAIMED_STATUS = 'Claimed'
 
+# Constant assigned for tasks which
+# have been completed
+CLOSED_STATUS = 'Closed'
+
 # Constant for the initial progress being
 # assigned to newly added articles
 INITIAL_ARTICLE_PROGRESS = 0
@@ -12,7 +16,7 @@ INITIAL_ARTICLE_PROGRESS = 0
 # Constant for mapping article status to a
 # number for storing purposes
 ARTICLE_STATUS_TO_NUMBER_MAPPING = \
-    {'Open': 0, 'Closed': 1, 'Claimed': 2}
+    {OPEN_STATUS: 0, CLOSED_STATUS: 1, CLAIMED_STATUS: 2}
 
 # Constant for mapping a number to article status
 ARTICLE_NUMBER_TO_STATUS_MAPPING = {

@@ -49,7 +49,7 @@
                     </td>
                     <td>
                         {% if task.can_modify_progress %}
-                            <select id="select-progress-{{ task.article_name }}"  onchange='saveTask("{{ task.article_name }}", "{{ task.task_id }}", "{{ logged_in_user }}");'>
+                            <select id="select-progress-{{ task.task_id }}"  onchange='saveTask("{{ task.article_name }}", "{{ task.task_id }}", "{{ logged_in_user }}");'>
                                 <option value="Not Started" {% if task.progress == 'Not Started' %}selected="selected"{% endif %}>Not Started</option>
                                 <option value="Just Started" {% if task.progress == 'Just Started' %}selected="selected"{% endif %}>Just Started</option>
                                 <option value="In Progress" {% if task.progress == 'In Progress' %}selected="selected"{% endif %}>In Progress</option>

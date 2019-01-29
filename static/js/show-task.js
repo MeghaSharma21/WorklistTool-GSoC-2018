@@ -17,7 +17,15 @@ function saveTask(article_name, task_id) {
             'progress': $(progress_id).val(),
         },
         success: function (data) {
-            window.location.reload(true);
+            if(!data.success) {
+                $("#alert-message-holder").html(
+                    "<div class='alert alert-danger' role='alert'>" +
+                    "<a href='#' class='close' data-dismiss='alert'>&times;</a> "
+                    + data.message + "</div>"
+                );
+            } else {
+              window.location.reload(true);
+            }
         },
         error: function () {
             $("#alert-message-holder").html(
