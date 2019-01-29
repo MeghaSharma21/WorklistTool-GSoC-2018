@@ -2,40 +2,38 @@ var tasks;
 var worklist_name;
 var worklist_created_by;
 var input;
-var rowsPerPageIndices;
+var pageState;
 
-function populateModal(task) {
-    $('#exampleModalLongTitle').html(task.article_name);
-    $('#task_progress').val(task.progress);
-    $('input:radio[name=status][value='+task.status +']').prop("checked",true);
-}
-
-function taskForm(taskIndex){
-    var task = tasks[taskIndex];
-    populateModal(task);
-    $('#exampleModalCenter').modal();
-}
-
-function saveTask() {
+function saveTask(article_name, task_id) {
+    var status_id = "#select-status-" + task_id;
+    var progress_id = "#select-progress-" + task_id;
     $.ajax({url: "/worklist-tool/update-task-info/",
         type: "post",
         data: {
             'worklist_name': worklist_name,
             'worklist_created_by': worklist_created_by,
-            'article_name': $('#exampleModalLongTitle').html(),
-            'status': $('input:radio[name=status]:checked').val(),
-            'progress': $('#task_progress').val(),
+            'article_name': article_name,
+            'status': $(status_id).val(),
+            'progress': $(progress_id).val(),
         },
         success: function (data) {
-            window.location.reload(true);
+            if(!data.success) {
+                $("#alert-message-holder").html(
+                    "<div class='alert alert-danger' role='alert'>" +
+                    "<a href='#' class='close' data-dismiss='alert'>&times;</a> "
+                    + data.message + "</div>"
+                );
+            } else {
+              window.location.reload(true);
+            }
         },
         error: function () {
             $("#alert-message-holder").html(
                 "<div class='alert alert-danger' role='alert'><a href='#' class='close' " +
                 "data-dismiss='alert'>&times;</a> " +
                 "<strong>Oh snap!</strong>Something went wrong while" +
-                " saving updated information! Please report Megha " +
-                "at meghasharma4910@gmail.com</div>"
+                " saving updated information! Please report issues at " +
+                "https://github.com/MeghaSharma21/WorklistTool-GSoC-2018/issues</div>"
             );
     }});
 }
@@ -45,21 +43,85 @@ function rememberState() {
         var rowsPerPageDropdownIndex = $('.page-list .dropdown-menu .dropdown-item.active').index();
 
         // Finding which page is active so that we can make it active again after refresh
-        rowsPerPageIndex = $('.pagination .page-item.active').index();
+        var rowsPerPageIndex = $('.pagination .page-item.active').index();
+
+        // Finding on which column the table is sorted
+        var sortableColumns = $('.th-inner.sortable.both');
+        var nameSortClass = '';
+        var progressSortClass = '';
+        var effortSortClass = '';
+        if (sortableColumns[0].innerText == 'Name') {
+            if(sortableColumns[0].classList.contains('asc')) {
+                nameSortClass = 'asc';
+            }
+            if(sortableColumns[0].classList.contains('desc')) {
+                nameSortClass = 'desc';
+            }
+        }
+        if (sortableColumns[1].innerText == 'Progress') {
+            if(sortableColumns[1].classList.contains('asc')) {
+                progressSortClass = 'asc';
+            }
+            if(sortableColumns[1].classList.contains('desc')) {
+                progressSortClass = 'desc';
+            }
+        }
+        if (sortableColumns[2].innerText == 'Effort') {
+            if(sortableColumns[2].classList.contains('asc')) {
+                effortSortClass = 'asc';
+            }
+            if(sortableColumns[2].classList.contains('desc')) {
+                effortSortClass = 'desc';
+            }
+        }
 
         return {'rowsPerPageDropdownIndex': rowsPerPageDropdownIndex,
-                'rowsPerPageIndex': rowsPerPageIndex
+                'rowsPerPageIndex': rowsPerPageIndex,
+                'nameSortClass': nameSortClass,
+                'progressSortClass': progressSortClass,
+                'effortSortClass': effortSortClass
         }
+
 }
 
 function restoreState() {
-      // making the number of rows to be same
-      var dropdownElements = $('.page-list .dropdown-menu .dropdown-item');
-      dropdownElements[rowsPerPageIndices.rowsPerPageDropdownIndex].click();
+        // making the number of rows to be same
+        var dropdownElements = $('.page-list .dropdown-menu .dropdown-item');
+        dropdownElements[pageState.rowsPerPageDropdownIndex].click();
 
-      // making the same page active as was before
-      var paginationElements = $('.pagination .page-item .page-link');
-      paginationElements[rowsPerPageIndices.rowsPerPageIndex].click();
+        // making the same page active as was before
+        var paginationElements = $('.pagination .page-item .page-link');
+        paginationElements[pageState.rowsPerPageIndex].click();
+
+        // sorting the columns as they were before
+        var sortableColumns = $('.th-inner.sortable.both');
+        if (sortableColumns[0].innerText == 'Name') {
+            if(pageState.nameSortClass == 'asc') {
+                sortableColumns[0].click();
+            }
+            if(pageState.nameSortClass == 'desc') {
+                sortableColumns[0].click();
+                sortableColumns[0].click();
+            }
+        }
+        if (sortableColumns[1].innerText == 'Progress') {
+            if(pageState.progressSortClass == 'asc') {
+                sortableColumns[1].click();
+            }
+            if(pageState.progressSortClass == 'desc') {
+                sortableColumns[1].click();
+                sortableColumns[1].click();
+            }
+        }
+        if (sortableColumns[2].innerText == 'Effort') {
+            if(pageState.effortSortClass == 'asc') {
+                sortableColumns[2].click();
+            }
+            if(pageState.effortSortClass == 'desc') {
+                sortableColumns[2].click();
+                sortableColumns[2].click();
+            }
+        }
 }
 
 
@@ -68,7 +130,7 @@ function refresh() {
     worklist_name = $("#search_by_task_name_form input[name=worklist_name]").val();
     worklist_created_by = $("#search_by_task_name_form input[name=worklist_created_by]").val();
 
-    rowsPerPageIndices = rememberState();
+    pageState = rememberState();
 
     $('#task_table').load(
         "/worklist-tool/update-task-table/" + encodeURIComponent(worklist_created_by) + "/" + encodeURIComponent(worklist_name) + "?search_term=" + encodeURIComponent(search_term), function(){
@@ -116,4 +178,3 @@ function addArticle(worklist_name, worklist_created_by) {
 
     return false;
 }
-

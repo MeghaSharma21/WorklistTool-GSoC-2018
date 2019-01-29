@@ -34,17 +34,19 @@
 					<h2 class="top-heading">Create Worklist</h2>
 					<form onsubmit="return saveWorklist()">
 					  Name of Worklist: <input class="worklist-name" id="worklist_name" type="text" name="name"
-                                               placeholder="Enter name of the new worklist you want to create...">
+                                               placeholder="Enter name of the new worklist you want to create.">
 					  <br>
 					  Tags: <input class="worklist-tag" id="worklist_tags" type="text" name="tags"
-                                   placeholder="Enter the theme to which it may belong...">
+                                   placeholder="Enter comma separated tags to which the worklist will belong.">
 					  <br>
 					  <p>Description:</p>
-					  <textarea class="worklist-description" id="worklist_description" rows="4" cols="60"
-                                name="description"></textarea>
+					  <textarea class="worklist-description" id="worklist_description"
+                                placeholder="Describe what this worklist is about and what needs to be done in it"
+                                rows="4" cols="60" name="description"></textarea>
 					  <br>
-					  PetScan Query ID: <input class="worklist-psid" id="worklist_psid" type="text" name="psid"
-                                               placeholder="Enter the PetScan Query ID to associate with this worklist...">
+					  PetScan Query ID: <input class="worklist-psid" id="worklist_psid"
+                                               type="text" name="psid"
+                                               placeholder="Enter the PetScan Query ID which you want to associate with this worklist">
 					  <br>
 					  <div id="articles_input" class="row">
 					  </div>

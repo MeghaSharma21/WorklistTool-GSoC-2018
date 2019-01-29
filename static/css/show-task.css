@@ -14,5 +14,6 @@
 }
 
 .share-icon-size {
-    font-size: 25px;
+    font-size: 27px;
+    padding-inline-start: 10px;
 }

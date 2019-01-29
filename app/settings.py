@@ -55,7 +55,10 @@ TEMPLATES = [
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
             ],
-            'builtins': ['django.contrib.staticfiles.templatetags.staticfiles']
+            'builtins': ['django.contrib.staticfiles.templatetags.staticfiles'],
+            'libraries':{
+                'replace': 'worklist.template_tags.replace_space_filter'
+            }
         },
     },
 ]
@@ -123,3 +126,4 @@ SOCIAL_AUTH_UID_LENGTH = 190
 SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 190
 SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 190
 SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 190
+SOCIAL_AUTH_CLEAN_USERNAMES = False

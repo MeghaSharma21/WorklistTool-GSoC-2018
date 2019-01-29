@@ -1,5 +1,5 @@
 from worklist.constants import ARTICLE_STATUS_TO_NUMBER_MAPPING,\
-    INITIAL_ARTICLE_STATUS, INITIAL_ARTICLE_PROGRESS
+    INITIAL_ARTICLE_PROGRESS, OPEN_STATUS
 from worklist.views_helper_functions.fetch_articles_from_petscan import \
     fetch_articles_from_petscan
 from worklist.wikipedia_utils import convert_article_titles_into_ids
@@ -32,7 +32,7 @@ def store_added_articles(worklist_object, articles):
                 'article': article_object,
                 'description': article['description'],
                 'status':
-                    ARTICLE_STATUS_TO_NUMBER_MAPPING[INITIAL_ARTICLE_STATUS],
+                    ARTICLE_STATUS_TO_NUMBER_MAPPING[OPEN_STATUS],
                 'progress': INITIAL_ARTICLE_PROGRESS,
                 'effort': str(article['effort']),
                 'created_by': article['created_by']}
@@ -63,7 +63,7 @@ def store_psid_articles(worklist_object, psid, created_by):
                 'article': article_object,
                 'psid': psid,
                 'status':
-                    ARTICLE_STATUS_TO_NUMBER_MAPPING[INITIAL_ARTICLE_STATUS],
+                    ARTICLE_STATUS_TO_NUMBER_MAPPING[OPEN_STATUS],
                 'progress': INITIAL_ARTICLE_PROGRESS,
                 'created_by': created_by,
                 'description': 'This article is a part of petscan '
