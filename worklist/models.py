@@ -19,8 +19,8 @@ class WorkList(models.Model):
     @staticmethod
     def create_object(data):
         obj, created = WorkList.objects.update_or_create(name=data['name'],
-                                                         tags=data.get('tags', ''),
-                                                         description=data.get('description', ''),
+                                                         tags=data.get('tags', '-'),
+                                                         description=data.get('description', '-'),
                                                          created_by=data['created_by'],
                                                          psid=data.get('psid', 0))
         return obj
@@ -65,8 +65,8 @@ class Task(models.Model):
     psid = models.IntegerField(blank=True)
     description = models.CharField(max_length=300, blank=True)
     status = models.IntegerField(default=0)
-    progress = models.IntegerField(default=0)
-    effort = models.IntegerField(blank=True, null=True)
+    progress = models.CharField(max_length=100)
+    effort = models.CharField(max_length=100, blank=True, null=True)
     claimed_by = models.CharField(max_length=100, blank=True)
     created_by = models.CharField(max_length=100)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -85,20 +85,21 @@ class Task(models.Model):
     @staticmethod
     def create_object(data):
         if data.get('progress') == '' or data.get('progress') is None:
-            data['progress'] = 0
+            data['progress'] = '-'
 
         if data.get('effort') == '' or data.get('effort') is None:
-            data['effort'] = 0
+            data['effort'] = '-'
 
         if data.get('status') == '' or data.get('status') is None:
-            data['status'] = 0
+            data['status'] = '-'
 
         Task.objects.update_or_create(worklist=data['worklist'],
                                       article=data['article'],
                                       psid=data.get('psid', 0),
-                                      description=data.get('description', ''),
-                                      status=data.get('status', 0),
-                                      progress=data.get('progress', 0),
-                                      effort=data.get('effort', 0),
-                                      claimed_by=data.get('claimed_by', ''),
+                                      description=data.get('description', '-'),
+                                      status=data.get('status', '-'),
+                                      progress=data.get('progress', '-'),
+                                      effort=data.get('effort', '-'),
+                                      claimed_by=data.get('claimed_by', '-'),
                                       created_by=data['created_by'])
+

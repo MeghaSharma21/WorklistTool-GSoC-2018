@@ -18,7 +18,7 @@
 {% if tasks|length %}
     <div class="row">
         <div class="table-alignment">
-            <table data-pagination="true" data-toggle="table" class="table table-bordered">
+            <table id="task-table" data-pagination="true" data-toggle="table" class="table table-bordered">
                 <thead>
                   <tr>
                     <th data-sortable="true">Name</th>
@@ -33,13 +33,33 @@
                 <tbody>
                 {% for task in tasks %}
                   <tr>
-                    <td><a href="https://en.wikipedia.org/wiki/{{ task.article_name|replace:" " }}">{{ task.article_name }}</a>
-                         {% if logged_in_user and task.status == "open" or logged_in_user and task.status == "claimed" and task.claimed_by == logged_in_user %} <i class="fa fa-pencil-square-o" onclick="taskForm({{forloop.counter0}})"></i> {% endif %}
-                    </td>
+                    <td><a href="https://en.wikipedia.org/wiki/{{ task.article_name|replace:' ' }}">{{ task.article_name }}</a></td>
                     <td>{{ task.description }}</td>
                     <td>{{ task.created_by }}</td>
-                    <td>{{ task.status }}</td>
-                    <td>{{ task.progress }}</td>
+                    <td>
+                        {% if task.can_modify_status  %}
+                            <select id="select-status-{{ task.task_id }}" onchange='saveTask("{{ task.article_name }}", "{{ task.task_id }}");'>
+                                <option value="Open" {% if task.status == 'Open' %}selected="selected"{% endif %}>Open</option>
+                                <option value="Claimed" {% if task.status == 'Claimed' %}selected="selected"{% endif %}>Claimed</option>
+                                <option value="Closed" {% if task.status == 'Closed' %}selected="selected"{% endif %}>Closed</option>
+                            </select>
+                        {%  else %}
+                            {{ task.status }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.can_modify_progress %}
+                            <select id="select-progress-{{ task.task_id }}"  onchange='saveTask("{{ task.article_name }}", "{{ task.task_id }}", "{{ logged_in_user }}");'>
+                                <option value="Not Started" {% if task.progress == 'Not Started' %}selected="selected"{% endif %}>Not Started</option>
+                                <option value="Just Started" {% if task.progress == 'Just Started' %}selected="selected"{% endif %}>Just Started</option>
+                                <option value="In Progress" {% if task.progress == 'In Progress' %}selected="selected"{% endif %}>In Progress</option>
+                                <option value="Nearly Done" {% if task.progress == 'Nearly Done' %}selected="selected"{% endif %}>Nearly Done</option>
+                                <option value="Done" {% if task.status == 'Done' %}selected="selected"{% endif %}>Done</option>
+                            </select>
+                        {%  else %}
+                            {{ task.progress }}
+                        {% endif %}
+                    </td>
                     <td>{{ task.effort }}</td>
                     <td>{{ task.claimed_by }}</td>
                   </tr>

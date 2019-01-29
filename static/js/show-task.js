@@ -4,38 +4,36 @@ var worklist_created_by;
 var input;
 var pageState;
 
-function populateModal(task) {
-    $('#exampleModalLongTitle').html(task.article_name);
-    $('#task_progress').val(task.progress);
-    $('input:radio[name=status][value='+task.status +']').prop("checked",true);
-}
-
-function taskForm(taskIndex){
-    var task = tasks[taskIndex];
-    populateModal(task);
-    $('#exampleModalCenter').modal();
-}
-
-function saveTask() {
+function saveTask(article_name, task_id) {
+    var status_id = "#select-status-" + task_id;
+    var progress_id = "#select-progress-" + task_id;
     $.ajax({url: "/worklist-tool/update-task-info/",
         type: "post",
         data: {
             'worklist_name': worklist_name,
             'worklist_created_by': worklist_created_by,
-            'article_name': $('#exampleModalLongTitle').html(),
-            'status': $('input:radio[name=status]:checked').val(),
-            'progress': $('#task_progress').val(),
+            'article_name': article_name,
+            'status': $(status_id).val(),
+            'progress': $(progress_id).val(),
         },
         success: function (data) {
-            window.location.reload(true);
+            if(!data.success) {
+                $("#alert-message-holder").html(
+                    "<div class='alert alert-danger' role='alert'>" +
+                    "<a href='#' class='close' data-dismiss='alert'>&times;</a> "
+                    + data.message + "</div>"
+                );
+            } else {
+              window.location.reload(true);
+            }
         },
         error: function () {
             $("#alert-message-holder").html(
                 "<div class='alert alert-danger' role='alert'><a href='#' class='close' " +
                 "data-dismiss='alert'>&times;</a> " +
                 "<strong>Oh snap!</strong>Something went wrong while" +
-                " saving updated information! Please report Megha " +
-                "at meghasharma4910@gmail.com</div>"
+                " saving updated information! Please report issues at " +
+                "https://github.com/MeghaSharma21/WorklistTool-GSoC-2018/issues</div>"
             );
     }});
 }

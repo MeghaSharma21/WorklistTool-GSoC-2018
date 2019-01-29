@@ -3,13 +3,15 @@ import json
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 import logging
-from worklist.constants import ARTICLE_STATUS_TO_NUMBER_MAPPING
+from worklist.constants import ARTICLE_STATUS_TO_NUMBER_MAPPING, CLAIMED_STATUS, OPEN_STATUS
 from worklist.views_helper_functions.search_helpers import search_worklist_helper, search_task_helper
 from worklist.views_helper_functions.store_articles import \
     store_added_articles, store_psid_articles
 from worklist.models import WorkList, Task
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+
+from worklist.utility_functions import can_modify_task_status, can_modify_task_progress
 
 logger = logging.getLogger('django')
 
@@ -189,31 +191,59 @@ def search_task(request, username, worklist_created_by, worklist_name):
 
 
 # View to update the table displaying all tasks of a worklist
-def update_task_table(request, worklist_created_by, worklist_name):
+@with_logged_in_user
+def update_task_table(request, username, worklist_created_by, worklist_name):
     search_term = request.GET.get('search_term', '')
     results = search_task_helper(search_term, worklist_name, worklist_created_by)
 
-    return render(request, 'show-task-table.html', {'tasks': results['tasks']})
+    for task in results['tasks']:
+        task['can_modify_status'] = can_modify_task_status(task['status'], task['claimed_by'],
+                                                           worklist_created_by, username)
+
+        task['can_modify_progress'] = can_modify_task_progress(task['status'], task['claimed_by'],
+                                                               worklist_created_by, username)
+
+    return render(request, 'show-task-table.html', {'tasks': results['tasks'],
+                                                    'logged_in_user': username})
 
 
 # Update task information when user edits it
 @login_required
-def update_task_info(request, worklist_created_by, worklist_name):
+def update_task_info(request):
     username = request.user.username
+    worklist_created_by = request.POST.get('worklist_created_by', '')
+    worklist_name = request.POST.get('worklist_name', '')
     article_name = request.POST.get('article_name', '')
     status = request.POST.get('status', '')
     progress = request.POST.get('progress', '')
     claimed_by = ''
 
-    if status == 'claimed':
+    if status == CLAIMED_STATUS:
         claimed_by = username
     status_code = ARTICLE_STATUS_TO_NUMBER_MAPPING[status]
 
-    results = Task.objects.filter(worklist__name=worklist_name,
+    try:
+        result = Task.objects.get(worklist__name=worklist_name,
                                   worklist__created_by=worklist_created_by,
                                   article__name=article_name)
+    except Task.MultipleObjectsReturned or Task.DoesNotExist:
+        error_message = "Can't update task info as either the entry " \
+                        "doesn't exist or there are multiple entries."
+        logger.info(error_message)
+        raise RuntimeWarning(error_message)
 
-    results.update(progress=progress, status=status_code, claimed_by=claimed_by)
+    if can_modify_task_status(result.status, result.claimed_by, worklist_created_by, username):
+        result.status = status_code
+        result.claimed_by = claimed_by
+        result.save(update_fields=['status', 'claimed_by'])
+    else:
+        return JsonResponse({'success': False, 'message': 'Do not have permissions to edit the status'})
+
+    if can_modify_task_progress(result.status, result.claimed_by, worklist_created_by, username):
+        result.progress = progress
+        result.save(update_fields=['progress'])
+    else:
+        return JsonResponse({'success': False, 'message': 'Do not have permissions to edit the progress'})
 
     return JsonResponse({'success': True})
 
@@ -236,4 +266,3 @@ def show_user_worklists(request):
     return render(request, 'user-worklists.html', {'logged_in_user': username,
                                                    'created_worklists': list(created_worklists),
                                                    'worked_upon_worklists': list(worked_upon_worklists)})
-

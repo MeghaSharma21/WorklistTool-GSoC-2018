@@ -62,6 +62,7 @@ def search_task_helper(search_term, worklist_name, worklist_created_by):
     for result in results:
         task = {
             'article_name': result.article.name,
+            'task_id': result.task_id,
             'description': result.description,
             'created_by': result.created_by,
             'status': ARTICLE_NUMBER_TO_STATUS_MAPPING[result.status],

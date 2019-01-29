@@ -7,9 +7,9 @@ function addNewArticle() {
         'class="article-name" name="article-name" placeholder="Enter name of the article">' +
         '<br/>Description: <input type="text" name="article-description" ' +
         'class="article-description" placeholder="Enter description of the work to be done ' +
-        'for this article"><br/>Effort: <input type="text" ' +
-        'name="article-effort" class="article-effort" placeholder="Enter estimated effort ' +
-        'to do work for this article"></div>'
+        'for this article"><br/>Effort: <select name="article-effort" class="article-effort">' +
+        '<option value="Low">Low</option><option value="Medium">Medium</option>' +
+        '<option value="High">High</option></select><br/></div>'
 
     $('#articles_input').append(html);
 }
@@ -25,9 +25,9 @@ function saveWorklist() {
     for(var i=1; i<=noOfArticles; i++)
     {
         var article = {
-            'name': $('#article_'+i+' .article_name').val(),
-            'effort': $('#article_'+i+' .article_effort').val(),
-            'description': $('#article_'+i+' .article_description').val(),
+            'name': $('#article_'+i+' .article-name').val(),
+            'effort': $('#article_'+i+' .article-effort').val(),
+            'description': $('#article_'+i+' .article-description').val(),
             'created_by': $('#worklist_username').val()
         };
         articlesArray.push(article);
@@ -61,8 +61,8 @@ function saveWorklist() {
                 "<div class='alert alert-danger' role='alert'><a href='#' " +
                 "class='close' data-dismiss='alert'>&times;</a> " +
                 "<strong>Oh snap! </strong>Something went wrong while" +
-                " saving worklist. Please report Megha " +
-                "at meghasharma4910@gmail.com</div>"
+                " saving worklist. Please report issues at " +
+                "https://github.com/MeghaSharma21/WorklistTool-GSoC-2018/issues</div>"
             );
         },
         complete: function () {
