@@ -103,7 +103,9 @@ def create_worklist(request):
                                               data['psid'], data['created_by'])
                 if success is False:
                     content['error'] = 1
-                    content['message'] = 'Petscan articles could not be saved.'
+                    content['message'] = 'Petscan articles could not be saved. Avoid queries that take '\
+                                        'very long for PetScan to evaluate and make sure your provided '\
+                                        'PSID is valid.'
 
         if content['error'] == 1:
             WorkList.objects.filter(name=data['name'],

@@ -29,3 +29,6 @@ TIMEOUT_IN_SECONDS = 10
 
 # URL for Petscan
 PETSCAN_URL = "https://petscan.wmflabs.org"
+
+# Timeout for PetScan
+TIMEOUT_FOR_PETSCAN = 180
